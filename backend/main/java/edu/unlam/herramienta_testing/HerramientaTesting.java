@@ -35,7 +35,8 @@ public class HerramientaTesting {
 	private static final String []KEYWORDS = {"if", "while", "case", "for", "switch", "do", "continue", "break", "&&","||", "?", ":", "catch", "finally", "throw", "throws"};
 	private static final String TIPO_ARCHIVO = ".java";
 	private static final String CLASE_REGEX = "(?:\\S*)\\s*(?:class) (\\w*)\\s*\\S*";
-
+	private static final String METODO_REGEX = "(?:public|protected|private)(?:\\s*)?(?:\\w*)(?:\\s)(\\w*)(?:\\s*)\\((?:.*)?\\)\\s*\\{";
+	
 	public HerramientaTesting(String filename, String className) {
 		
 		try {
@@ -44,6 +45,7 @@ public class HerramientaTesting {
 			this.fileContent = new ArrayList<String>();
 			this.lineasMetodoProcesado = new ArrayList<String>();
 			this.clasesArchivo = new ArrayList<String>();
+			this.metodosClase = new ArrayList<String>();
 			this.className = className;
 			this.complejidadCiclomatica = 1;
 			this.cantidadComentarios = 0;
@@ -55,14 +57,12 @@ public class HerramientaTesting {
 			}
 			
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			try {
 				scanner.close();
 				fileReader.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -99,7 +99,15 @@ public class HerramientaTesting {
 	}
 	
 	public void obtenerMetodosClase() {
+		Pattern patronMetodo =  Pattern.compile(METODO_REGEX);
+		Matcher matcherMetodo = null; 
 		
+		for (String str : fileContent) {
+			matcherMetodo = patronMetodo.matcher(str);
+			if(matcherMetodo.find()) {
+				metodosClase.add(matcherMetodo.group(1));
+			}
+		}
 	}
 	
 	public void resolver() {

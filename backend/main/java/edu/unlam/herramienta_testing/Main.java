@@ -16,6 +16,7 @@ public class Main {
 		
 		//mcCabe.obtenerArchivosCarpeta("F:\\eclipse-workspace\\HerramientaDeTesting\\backend\\main\\java\\edu\\unlam\\herramienta_testing");
 		mcCabe.obtenerClasesArchivo();
+		mcCabe.obtenerMetodosClase();
 		/*
 		System.out.println("Ingrese la ruta al archivo a evaluar (ejemplo: ./input/Triangulo.java): ");
 		ruta = scanner.next();
