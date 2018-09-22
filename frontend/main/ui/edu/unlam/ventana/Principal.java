@@ -2,8 +2,11 @@ package edu.unlam.ventana;
 
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.FileDialog;
 import java.awt.Font;
 import java.awt.Toolkit;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -17,6 +20,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import javax.swing.event.MenuKeyListener;
+import javax.swing.event.MenuKeyEvent;
 
 public class Principal extends JFrame {
 
@@ -27,6 +34,7 @@ public class Principal extends JFrame {
 	private JTextField textFieldClase;
 	private JTextField textFieldMetodo;
 	private JTextField textFieldCodigo;
+	private static Principal frame;
 
 	/**
 	 * Launch the application.
@@ -35,7 +43,7 @@ public class Principal extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Principal frame = new Principal();
+					frame = new Principal();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -68,6 +76,13 @@ public class Principal extends JFrame {
 		menuAnalisis.add(opcionElegir);
 		
 		JMenuItem opcionSalir = new JMenuItem("Salir");
+		opcionSalir.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				dispose();
+	            System.exit(0);
+			}
+		});
 		menuAnalisis.add(opcionSalir);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.DARK_GRAY);
