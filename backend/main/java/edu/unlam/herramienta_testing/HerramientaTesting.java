@@ -1,8 +1,10 @@
 package edu.unlam.herramienta_testing;
 
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -18,14 +20,16 @@ public class HerramientaTesting {
 	String method;
 	String className;
 	
+	String[] archivosDirectorio;
+	
 	private int complejidadCiclomatica;
 	private int cantidadComentarios;
 	private int cantidadLineas;
 	private double porcentajeComentarios;
 	
 
-	String []KEYWORDS = {"if", "while", "case", "for", "switch", "do", "continue", "break", "&&","||", "?", ":", "catch", "finally", "throw", "throws"};
-	
+	private static final String []KEYWORDS = {"if", "while", "case", "for", "switch", "do", "continue", "break", "&&","||", "?", ":", "catch", "finally", "throw", "throws"};
+	private static final String TIPO_ARCHIVO = ".java";
 
 	public HerramientaTesting(String filename, String className, String method) {
 		
@@ -58,6 +62,23 @@ public class HerramientaTesting {
 			}
 		}
 		
+	}
+	
+	// Retorna todos los archivos de extensión .java del directorio seleccionado.
+	public void obtenerArchivosCarpeta(String path) {	
+		
+		FilenameFilter filtro = new FilenameFilter() {
+	    @Override
+	    public boolean accept(File file, String name) {
+		    if (name.endsWith(TIPO_ARCHIVO)) {
+		        return true;
+		    } else {
+		        return false;
+		    }
+	    }};
+		
+		File directorio = new File(path);
+		archivosDirectorio = directorio.list(filtro);
 	}
 	
 	public void resolver() {
@@ -159,6 +180,15 @@ public class HerramientaTesting {
 	public void setMetodoProcesado(ArrayList<String> metodoProcesado) {
 		this.metodoProcesado = metodoProcesado;
 	}
+
+	public String[] getArchivosDirectorio() {
+		return archivosDirectorio;
+	}
+
+	public void setArchivosDirectorio(String[] archivosDirectorio) {
+		this.archivosDirectorio = archivosDirectorio;
+	}
+	
 	
 	
 }

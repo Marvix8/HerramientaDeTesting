@@ -1,9 +1,9 @@
 package edu.unlam.ventana;
 
 import java.awt.Color;
-import java.awt.Dialog.ModalExclusionType;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Toolkit;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -17,7 +17,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
-import java.awt.Toolkit;
 
 public class Principal extends JFrame {
 
@@ -54,7 +53,7 @@ public class Principal extends JFrame {
 		setResizable(false);
 		setTitle("Herramienta de Testing");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 750, 700);
+		setBounds(25, 25, 750, 700);
 		
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setBackground(Color.BLACK);
@@ -118,7 +117,7 @@ public class Principal extends JFrame {
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(textFieldCodigo, GroupLayout.DEFAULT_SIZE, 714, Short.MAX_VALUE)
+						.addComponent(textFieldCodigo, GroupLayout.DEFAULT_SIZE, 724, Short.MAX_VALUE)
 						.addComponent(lblNewLabel_3)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
@@ -134,11 +133,11 @@ public class Principal extends JFrame {
 										.addComponent(textFieldMetodo, GroupLayout.PREFERRED_SIZE, 203, GroupLayout.PREFERRED_SIZE))))
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_contentPane.createSequentialGroup()
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(layeredPane, GroupLayout.PREFERRED_SIZE, 266, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_contentPane.createSequentialGroup()
 									.addGap(81)
-									.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 119, GroupLayout.PREFERRED_SIZE)))))
+									.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 119, GroupLayout.PREFERRED_SIZE))
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(layeredPane, GroupLayout.PREFERRED_SIZE, 266, GroupLayout.PREFERRED_SIZE)))))
 					.addContainerGap())
 		);
 		gl_contentPane.setVerticalGroup(
@@ -149,7 +148,7 @@ public class Principal extends JFrame {
 						.addComponent(lblseleccionArchivo)
 						.addComponent(lblNewLabel))
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addComponent(textFieldArchivo, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.UNRELATED)
@@ -158,11 +157,11 @@ public class Principal extends JFrame {
 								.addComponent(lblSeleccionMetodo))
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(textFieldMetodo, GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE)
-								.addComponent(textFieldClase, GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(lblNewLabel_3))
+								.addComponent(textFieldMetodo, GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
+								.addComponent(textFieldClase, GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)))
 						.addComponent(layeredPane, GroupLayout.PREFERRED_SIZE, 321, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(lblNewLabel_3)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(textFieldCodigo, GroupLayout.PREFERRED_SIZE, 247, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap())

@@ -11,6 +11,9 @@ public class Main {
 		String clase;
 		String metodo;
 		
+		HerramientaTesting mcCabe = new HerramientaTesting("./input/Triangulo.java", "Triangulo", "obtenerTipo");
+		
+		/*
 		System.out.println("Ingrese la ruta al archivo a evaluar (ejemplo: ./input/Triangulo.java): ");
 		ruta = scanner.next();
 		System.out.println("Ingrese la clase a evaluar (ejemplo: Triangulo): ");
@@ -21,7 +24,7 @@ public class Main {
 		
 		scanner.close();
 		
-		HerramientaTesting mcCabe = new HerramientaTesting(ruta, clase, metodo);
+		HerramientaTesting mcCabe = new HerramientaTesting(ruta, clase, metodo);*/
 		mcCabe.resolver();
 		mcCabe.mostrarResultado();
 		//mcCabe.imprimirResultado("./output/resultado.txt");
