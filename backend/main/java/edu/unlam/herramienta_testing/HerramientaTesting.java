@@ -16,7 +16,7 @@ public class HerramientaTesting {
 	FileReader fileReader;
 	Scanner scanner;
 	
-	ArrayList <String> metodoProcesado;
+	ArrayList <String> lineasMetodoProcesado;
 	ArrayList <String> fileContent;
 	
 	String method;
@@ -24,6 +24,7 @@ public class HerramientaTesting {
 	
 	String[] archivosDirectorio;
 	ArrayList <String> clasesArchivo;
+	ArrayList <String> metodosClase;
 	
 	private int complejidadCiclomatica;
 	private int cantidadComentarios;
@@ -41,7 +42,7 @@ public class HerramientaTesting {
 			fileReader = new FileReader(filename);
 			scanner = new Scanner(fileReader);
 			this.fileContent = new ArrayList<String>();
-			this.metodoProcesado = new ArrayList<String>();
+			this.lineasMetodoProcesado = new ArrayList<String>();
 			this.clasesArchivo = new ArrayList<String>();
 			this.className = className;
 			this.complejidadCiclomatica = 1;
@@ -70,7 +71,6 @@ public class HerramientaTesting {
 	
 	// Retorna todos los archivos de extensión .java del directorio seleccionado.
 	public void obtenerArchivosCarpeta(String path) {	
-		
 		FilenameFilter filtro = new FilenameFilter() {
 	    @Override
 	    public boolean accept(File file, String name) {
@@ -98,6 +98,10 @@ public class HerramientaTesting {
 		}
 	}
 	
+	public void obtenerMetodosClase() {
+		
+	}
+	
 	public void resolver() {
 		int numeroLinea = 0;
 		
@@ -115,7 +119,7 @@ public class HerramientaTesting {
 	}
 	
 	public void mostrarResultado() {
-		for(String str : this.getMetodoProcesado()) {
+		for(String str : this.getLineasMetodoProcesado()) {
 			System.out.println(str);
 		}
 		System.out.println("La complejidad ciclomatica del metodo " + method + " de la clase " + className + " es: " + this.getComplejidadCiclomatica());
@@ -129,7 +133,7 @@ public class HerramientaTesting {
 		String linea = "";
 		
 		do {
-			metodoProcesado.add(fileContent.get(numeroLinea));
+			lineasMetodoProcesado.add(fileContent.get(numeroLinea));
 			linea = fileContent.get(numeroLinea);
 			String[] palabras = linea.split(" |\\t|\\(|\\)");
 			
@@ -198,12 +202,12 @@ public class HerramientaTesting {
 		this.porcentajeComentarios = porcentajeComentarios;
 	}
 
-	public ArrayList<String> getMetodoProcesado() {
-		return metodoProcesado;
+	public ArrayList<String> getLineasMetodoProcesado() {
+		return lineasMetodoProcesado;
 	}
 
-	public void setMetodoProcesado(ArrayList<String> metodoProcesado) {
-		this.metodoProcesado = metodoProcesado;
+	public void setLineasMetodoProcesado(ArrayList<String> lineasMetodoProcesado) {
+		this.lineasMetodoProcesado = lineasMetodoProcesado;
 	}
 
 	public String[] getArchivosDirectorio() {
