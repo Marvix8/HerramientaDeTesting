@@ -11,8 +11,11 @@ public class Main {
 		String clase;
 		String metodo;
 		
-		HerramientaTesting mcCabe = new HerramientaTesting("./input/Triangulo.java", "Triangulo", "obtenerTipo");
+		HerramientaTesting mcCabe = new HerramientaTesting("./input/Triangulo.java", "Triangulo");
+		mcCabe.setMethod("obtenerTipo");
 		
+		//mcCabe.obtenerArchivosCarpeta("F:\\eclipse-workspace\\HerramientaDeTesting\\backend\\main\\java\\edu\\unlam\\herramienta_testing");
+		mcCabe.obtenerClasesArchivo();
 		/*
 		System.out.println("Ingrese la ruta al archivo a evaluar (ejemplo: ./input/Triangulo.java): ");
 		ruta = scanner.next();

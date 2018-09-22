@@ -8,6 +8,8 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class HerramientaTesting {
 	
@@ -21,6 +23,7 @@ public class HerramientaTesting {
 	String className;
 	
 	String[] archivosDirectorio;
+	ArrayList <String> clasesArchivo;
 	
 	private int complejidadCiclomatica;
 	private int cantidadComentarios;
@@ -30,16 +33,17 @@ public class HerramientaTesting {
 
 	private static final String []KEYWORDS = {"if", "while", "case", "for", "switch", "do", "continue", "break", "&&","||", "?", ":", "catch", "finally", "throw", "throws"};
 	private static final String TIPO_ARCHIVO = ".java";
+	private static final String CLASE_REGEX = "(?:\\S*)\\s*(?:class) (\\w*)\\s*\\S*";
 
-	public HerramientaTesting(String filename, String className, String method) {
+	public HerramientaTesting(String filename, String className) {
 		
 		try {
 			fileReader = new FileReader(filename);
 			scanner = new Scanner(fileReader);
 			this.fileContent = new ArrayList<String>();
 			this.metodoProcesado = new ArrayList<String>();
+			this.clasesArchivo = new ArrayList<String>();
 			this.className = className;
-			this.method = method;
 			this.complejidadCiclomatica = 1;
 			this.cantidadComentarios = 0;
 			this.cantidadLineas = 0;
@@ -79,6 +83,20 @@ public class HerramientaTesting {
 		
 		File directorio = new File(path);
 		archivosDirectorio = directorio.list(filtro);
+	}
+	
+	// Método que obtiene todas las clases de un archivo
+	public void obtenerClasesArchivo() {
+		Pattern patronClase =  Pattern.compile(CLASE_REGEX);
+		Matcher matcherClase = null; 
+		
+		for (String str : fileContent) {
+			matcherClase = patronClase.matcher(str);
+			if(matcherClase.find()) {
+				clasesArchivo.add(matcherClase.group(1));
+				System.out.println(matcherClase.group(1));
+			}
+		}
 	}
 	
 	public void resolver() {
@@ -137,6 +155,14 @@ public class HerramientaTesting {
 		} while(!fileContent.isEmpty() && contadorLlaves != 0);
 	}
 	
+	public String getMethod() {
+		return method;
+	}
+
+	public void setMethod(String method) {
+		this.method = method;
+	}
+
 	private void calcularPorcentajeComentarios() {
 		this.porcentajeComentarios = Double.valueOf(100 * this.cantidadComentarios) / Double.valueOf(this.cantidadLineas);
 	}
@@ -187,9 +213,7 @@ public class HerramientaTesting {
 
 	public void setArchivosDirectorio(String[] archivosDirectorio) {
 		this.archivosDirectorio = archivosDirectorio;
-	}
-	
-	
+	}	
 	
 }
 
