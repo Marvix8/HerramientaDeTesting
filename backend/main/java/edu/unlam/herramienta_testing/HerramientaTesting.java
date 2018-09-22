@@ -94,7 +94,6 @@ public class HerramientaTesting {
 			matcherClase = patronClase.matcher(str);
 			if(matcherClase.find()) {
 				clasesArchivo.add(matcherClase.group(1));
-				System.out.println(matcherClase.group(1));
 			}
 		}
 	}
