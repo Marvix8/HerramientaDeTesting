@@ -2,7 +2,6 @@ package edu.unlam.ventana;
 
 import java.awt.Color;
 import java.awt.EventQueue;
-import java.awt.FileDialog;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
@@ -10,31 +9,30 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import javax.swing.event.MenuKeyListener;
-import javax.swing.event.MenuKeyEvent;
+
+import edu.unlam.herramienta_testing.HerramientaTesting;
 
 public class Principal extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	
 	private JPanel contentPane;
-	private JTextField textFieldArchivo;
-	private JTextField textFieldClase;
-	private JTextField textFieldMetodo;
+	private JTextArea textFieldClase;
+	private JTextArea textFieldMetodo;
 	private JTextField textFieldCodigo;
-	private static Principal frame;
 
 	/**
 	 * Launch the application.
@@ -43,7 +41,7 @@ public class Principal extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					frame = new Principal();
+					Principal frame = new Principal();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -57,7 +55,6 @@ public class Principal extends JFrame {
 	 */
 	public Principal() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Principal.class.getResource("/com/sun/java/swing/plaf/motif/icons/DesktopIcon.gif")));
-		setAlwaysOnTop(true);
 		setResizable(false);
 		setTitle("Herramienta de Testing");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -72,7 +69,36 @@ public class Principal extends JFrame {
 		menuAnalisis.setForeground(Color.WHITE);
 		menuBar.add(menuAnalisis);
 		
+		JList textFieldArchivo = new JList();
+		textFieldArchivo.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+			//	System.out.println(textFieldArchivo.getSelectedText());
+			}
+		});
+		textFieldArchivo.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		//textFieldArchivo.setEditable(false);
+		//textFieldArchivo.setText("Seleccione una carpeta con archivos .java desde el menú Análisis -> Elegir Carpeta...");
+		
 		JMenuItem opcionElegir = new JMenuItem("Elegir Carpeta");
+		opcionElegir.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				HerramientaTesting ht = new HerramientaTesting();
+				String directorio = obtenerDirectorio();
+				ht.obtenerArchivosCarpeta(directorio);
+				String[] archivo = ht.getArchivosDirectorio();
+				
+				if(archivo != null) {
+					//textFieldArchivo.setText("");
+					int indice = 0;
+					for (String str : archivo) {
+						textFieldArchivo.setSelectedIndex(indice);
+						//textFieldArchivo.append(directorio + "\\" + str + "\n");
+					}
+				}
+			}
+		});
 		menuAnalisis.add(opcionElegir);
 		
 		JMenuItem opcionSalir = new JMenuItem("Salir");
@@ -93,10 +119,6 @@ public class Principal extends JFrame {
 		lblseleccionArchivo.setForeground(Color.WHITE);
 		lblseleccionArchivo.setFont(new Font("Tahoma", Font.BOLD, 11));
 		
-		textFieldArchivo = new JTextField();
-		textFieldArchivo.setEditable(false);
-		textFieldArchivo.setColumns(10);
-		
 		JLabel lblSeleccionClase = new JLabel("Seleccione una clase de la lista: ");
 		lblSeleccionClase.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblSeleccionClase.setForeground(Color.WHITE);
@@ -105,11 +127,12 @@ public class Principal extends JFrame {
 		lblSeleccionMetodo.setForeground(Color.WHITE);
 		lblSeleccionMetodo.setFont(new Font("Tahoma", Font.BOLD, 11));
 		
-		textFieldClase = new JTextField();
+		textFieldClase = new JTextArea();
+		textFieldClase.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		textFieldClase.setEditable(false);
 		textFieldClase.setColumns(10);
 		
-		textFieldMetodo = new JTextField();
+		textFieldMetodo = new JTextArea();
 		textFieldMetodo.setEditable(false);
 		textFieldMetodo.setColumns(10);
 		
@@ -123,9 +146,10 @@ public class Principal extends JFrame {
 		
 		JLayeredPane layeredPane = new JLayeredPane();
 		
-		JLabel lblNewLabel = new JLabel("Análisis del Método");
-		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblNewLabel.setForeground(new Color(255, 255, 255));
+		JLabel lblAnalisisMetodo = new JLabel("Análisis del Método");
+		lblAnalisisMetodo.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblAnalisisMetodo.setForeground(new Color(255, 255, 255));
+		
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -135,9 +159,8 @@ public class Principal extends JFrame {
 						.addComponent(textFieldCodigo, GroupLayout.DEFAULT_SIZE, 724, Short.MAX_VALUE)
 						.addComponent(lblNewLabel_3)
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 								.addComponent(lblseleccionArchivo)
-								.addComponent(textFieldArchivo)
 								.addGroup(gl_contentPane.createSequentialGroup()
 									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 										.addComponent(lblSeleccionClase)
@@ -145,11 +168,12 @@ public class Principal extends JFrame {
 									.addGap(35)
 									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 										.addComponent(lblSeleccionMetodo)
-										.addComponent(textFieldMetodo, GroupLayout.PREFERRED_SIZE, 203, GroupLayout.PREFERRED_SIZE))))
+										.addComponent(textFieldMetodo, GroupLayout.PREFERRED_SIZE, 203, GroupLayout.PREFERRED_SIZE)))
+								.addComponent(textFieldArchivo, GroupLayout.PREFERRED_SIZE, 440, GroupLayout.PREFERRED_SIZE))
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_contentPane.createSequentialGroup()
 									.addGap(81)
-									.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 119, GroupLayout.PREFERRED_SIZE))
+									.addComponent(lblAnalisisMetodo, GroupLayout.PREFERRED_SIZE, 119, GroupLayout.PREFERRED_SIZE))
 								.addGroup(gl_contentPane.createSequentialGroup()
 									.addPreferredGap(ComponentPlacement.RELATED)
 									.addComponent(layeredPane, GroupLayout.PREFERRED_SIZE, 266, GroupLayout.PREFERRED_SIZE)))))
@@ -161,19 +185,20 @@ public class Principal extends JFrame {
 					.addContainerGap()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblseleccionArchivo)
-						.addComponent(lblNewLabel))
+						.addComponent(lblAnalisisMetodo))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(textFieldArchivo, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addGap(6)
+							.addComponent(textFieldArchivo, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE)
+							.addGap(3)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 								.addComponent(lblSeleccionClase)
 								.addComponent(lblSeleccionMetodo))
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(textFieldMetodo, GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
-								.addComponent(textFieldClase, GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)))
+								.addComponent(textFieldMetodo, GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
+								.addComponent(textFieldClase, GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)))
 						.addComponent(layeredPane, GroupLayout.PREFERRED_SIZE, 321, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(lblNewLabel_3)
@@ -287,5 +312,21 @@ public class Principal extends JFrame {
 		layeredPane.add(labelCantHalsteadVolument);
 		contentPane.setLayout(gl_contentPane);
 
+	}
+	
+	private String obtenerDirectorio() {
+		String directorioObtenido;
+		JFileChooser chooser = new JFileChooser();
+	    chooser.setCurrentDirectory(new java.io.File("."));
+	    chooser.setDialogTitle("Seleccione el directorio");
+	    chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+	    chooser.setAcceptAllFileFilterUsed(false);
+
+	    if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+	    	directorioObtenido = chooser.getSelectedFile().toString();
+	    	return directorioObtenido;
+	    } else {
+	    	return null;
+	    }
 	}
 }
