@@ -93,7 +93,6 @@ public class HerramientaTesting {
 	public void obtenerClasesArchivo() {
 		Pattern patronClase =  Pattern.compile(CLASE_REGEX);
 		Matcher matcherClase = null; 
-		
 		for (String str : fileContent) {
 			matcherClase = patronClase.matcher(str);
 			if(matcherClase.find()) {
@@ -228,6 +227,22 @@ public class HerramientaTesting {
 
 	public void setArchivosDirectorio(String[] archivosDirectorio) {
 		this.archivosDirectorio = archivosDirectorio;
+	}
+
+	public ArrayList<String> getClasesArchivo() {
+		return clasesArchivo;
+	}
+
+	public void setClasesArchivo(ArrayList<String> clasesArchivo) {
+		this.clasesArchivo = clasesArchivo;
+	}
+
+	public ArrayList<String> getMetodosClase() {
+		return metodosClase;
+	}
+
+	public void setMetodosClase(ArrayList<String> metodosClase) {
+		this.metodosClase = metodosClase;
 	}	
 	
 }

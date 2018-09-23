@@ -1,5 +1,6 @@
 package edu.unlam.herramienta_testing;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
@@ -11,12 +12,16 @@ public class Main {
 		String clase;
 		String metodo;
 		
-		HerramientaTesting mcCabe = new HerramientaTesting("./input/Triangulo.java", "Triangulo");
-		mcCabe.setMethod("obtenerTipo");
+		HerramientaTesting mcCabe = new HerramientaTesting("F:\\eclipse-workspace\\HerramientaDeTesting\\input\\Triangulo.java", "Triangulo");
+		//mcCabe.setMethod("obtenerTipo");
 		
 		//mcCabe.obtenerArchivosCarpeta("F:\\eclipse-workspace\\HerramientaDeTesting\\backend\\main\\java\\edu\\unlam\\herramienta_testing");
 		mcCabe.obtenerClasesArchivo();
-		mcCabe.obtenerMetodosClase();
+		ArrayList<String> hola = mcCabe.getMetodosClase();
+		/*for (String str : hola) {
+			System.out.println(str);
+		}*/
+		//mcCabe.obtenerMetodosClase();
 		/*
 		System.out.println("Ingrese la ruta al archivo a evaluar (ejemplo: ./input/Triangulo.java): ");
 		ruta = scanner.next();
@@ -29,8 +34,8 @@ public class Main {
 		scanner.close();
 		
 		HerramientaTesting mcCabe = new HerramientaTesting(ruta, clase, metodo);*/
-		mcCabe.resolver();
-		mcCabe.mostrarResultado();
+		//mcCabe.resolver();
+		//mcCabe.mostrarResultado();
 		//mcCabe.imprimirResultado("./output/resultado.txt");
 		
 	}
