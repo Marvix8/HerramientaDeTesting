@@ -12,12 +12,12 @@ public class Main {
 		String clase;
 		String metodo;
 		
-		HerramientaTesting mcCabe = new HerramientaTesting("F:\\eclipse-workspace\\HerramientaDeTesting\\input\\Triangulo.java", "Triangulo");
-		//mcCabe.setMethod("obtenerTipo");
+		//HerramientaTesting mcCabe = new HerramientaTesting("F:\\eclipse-workspace\\HerramientaDeTesting\\input\\Triangulo.java", "Triangulo");
+		///mcCabe.setMethod("obtenerTipo");
 		
 		//mcCabe.obtenerArchivosCarpeta("F:\\eclipse-workspace\\HerramientaDeTesting\\backend\\main\\java\\edu\\unlam\\herramienta_testing");
-		mcCabe.obtenerClasesArchivo();
-		ArrayList<String> hola = mcCabe.getMetodosClase();
+		//mcCabe.obtenerClasesArchivo();
+		//ArrayList<String> hola = mcCabe.getMetodosClase();
 		/*for (String str : hola) {
 			System.out.println(str);
 		}*/

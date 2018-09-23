@@ -38,6 +38,8 @@ public class Principal extends JFrame {
 	private JList<String> listMetodo;
 	private JTextArea textAreaCodigo;
 	private JTextField textFieldDirectorioSeleccionado;
+	private HerramientaTesting ht;
+
 
 	/**
 	 * Launch the application.
@@ -96,8 +98,6 @@ public class Principal extends JFrame {
 		textAreaCodigo = new JTextArea();
 		textAreaCodigo.setEditable(false);
 		textAreaCodigo.setColumns(10);
-		
-		JScrollPane scrollBar = new JScrollPane(textAreaCodigo);
 		
 		JLabel lblCodigoMetodoSeleccionado = new JLabel("Código del método seleccionado:");
 		lblCodigoMetodoSeleccionado.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -325,7 +325,7 @@ public class Principal extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				String dirArchivo = textFieldDirectorioSeleccionado.getText() + "\\" + listArchivo.getSelectedValue();
-				HerramientaTesting ht = new HerramientaTesting(dirArchivo, "Triangulo");
+				ht = new HerramientaTesting(dirArchivo);
 				ht.obtenerClasesArchivo();
 				ArrayList<String> clasesArchivo = ht.getClasesArchivo();
 				listaModelClase.removeAllElements();
@@ -341,8 +341,7 @@ public class Principal extends JFrame {
 		listClase.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				String dirArchivo = textFieldDirectorioSeleccionado.getText() + "\\" + listArchivo.getSelectedValue();
-				HerramientaTesting ht = new HerramientaTesting(dirArchivo, "Triangulo");
+				ht.setClassName(listClase.getSelectedValue());
 				ht.obtenerMetodosClase();
 				ArrayList<String> metodosClase = ht.getMetodosClase();
 				listaModelMetodo.removeAllElements();
@@ -355,12 +354,10 @@ public class Principal extends JFrame {
 		listMetodo.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				String dirArchivo = textFieldDirectorioSeleccionado.getText() + "\\" + listArchivo.getSelectedValue();
-				HerramientaTesting ht = new HerramientaTesting(dirArchivo, "Triangulo");
+				textAreaCodigo.replaceRange("", 0, textAreaCodigo.getText().length());
 				ht.setMethod(listMetodo.getSelectedValue());
 				ht.resolver();
 				ArrayList<String> lineasMetodoProcesado = ht.getLineasMetodoProcesado();
-				textAreaCodigo.setText("");
 				for(String str : lineasMetodoProcesado) {
 					textAreaCodigo.append(str + "\n");
 				}

@@ -37,11 +37,7 @@ public class HerramientaTesting {
 	private static final String CLASE_REGEX = "(?:\\S*)\\s*(?:class) (\\w*)\\s*\\S*";
 	private static final String METODO_REGEX = "(?:public|protected|private)(?:\\s*)?(?:\\w*)(?:\\s)(\\w*)(?:\\s*)\\((?:.*)?\\)\\s*\\{";
 	
-	public HerramientaTesting() {
-		
-	}
-	
-	public HerramientaTesting(String filename, String className) {
+	public HerramientaTesting(String filename) {
 		
 		try {
 			fileReader = new FileReader(filename);
@@ -50,7 +46,6 @@ public class HerramientaTesting {
 			this.lineasMetodoProcesado = new ArrayList<String>();
 			this.clasesArchivo = new ArrayList<String>();
 			this.metodosClase = new ArrayList<String>();
-			this.className = className;
 			this.complejidadCiclomatica = 1;
 			this.cantidadComentarios = 0;
 			this.cantidadLineas = 0;
@@ -92,7 +87,8 @@ public class HerramientaTesting {
 	// Método que obtiene todas las clases de un archivo
 	public void obtenerClasesArchivo() {
 		Pattern patronClase =  Pattern.compile(CLASE_REGEX);
-		Matcher matcherClase = null; 
+		Matcher matcherClase = null;
+		clasesArchivo.clear();
 		for (String str : fileContent) {
 			matcherClase = patronClase.matcher(str);
 			if(matcherClase.find()) {
@@ -104,7 +100,7 @@ public class HerramientaTesting {
 	public void obtenerMetodosClase() {
 		Pattern patronMetodo =  Pattern.compile(METODO_REGEX);
 		Matcher matcherMetodo = null; 
-		
+		metodosClase.clear();
 		for (String str : fileContent) {
 			matcherMetodo = patronMetodo.matcher(str);
 			if(matcherMetodo.find()) {
@@ -142,6 +138,10 @@ public class HerramientaTesting {
 	private void mcCabe(int numeroLinea) {
 		int contadorLlaves = 0;
 		String linea = "";
+		lineasMetodoProcesado.clear();
+		this.cantidadComentarios = 0;
+		this.complejidadCiclomatica = 1;
+		this.cantidadLineas = 0;
 		
 		do {
 			lineasMetodoProcesado.add(fileContent.get(numeroLinea));
@@ -243,6 +243,14 @@ public class HerramientaTesting {
 
 	public void setMetodosClase(ArrayList<String> metodosClase) {
 		this.metodosClase = metodosClase;
+	}
+
+	public String getClassName() {
+		return className;
+	}
+
+	public void setClassName(String className) {
+		this.className = className;
 	}	
 	
 }
