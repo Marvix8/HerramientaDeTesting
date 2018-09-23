@@ -38,6 +38,7 @@ public class HerramientaTesting {
 	private static final String METODO_REGEX = "(?:public|protected|private)(?:\\s*)?(?:\\w*)(?:\\s)(\\w*)(?:\\s*)\\((?:.*)?\\)\\s*\\{";
 	
 	public HerramientaTesting() {
+		
 	}
 	
 	public HerramientaTesting(String filename, String className) {
