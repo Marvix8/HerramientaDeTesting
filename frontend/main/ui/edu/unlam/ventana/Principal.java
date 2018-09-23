@@ -69,14 +69,14 @@ public class Principal extends JFrame {
 		menuAnalisis.setForeground(Color.WHITE);
 		menuBar.add(menuAnalisis);
 		
-		JList textFieldArchivo = new JList();
-		textFieldArchivo.addMouseListener(new MouseAdapter() {
+		JList listArchivo = new JList();
+		listArchivo.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
 			//	System.out.println(textFieldArchivo.getSelectedText());
 			}
 		});
-		textFieldArchivo.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		listArchivo.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		//textFieldArchivo.setEditable(false);
 		//textFieldArchivo.setText("Seleccione una carpeta con archivos .java desde el menú Análisis -> Elegir Carpeta...");
 		
@@ -93,7 +93,8 @@ public class Principal extends JFrame {
 					//textFieldArchivo.setText("");
 					int indice = 0;
 					for (String str : archivo) {
-						textFieldArchivo.setSelectedIndex(indice);
+						listArchivo.setSelectedIndex(indice);
+						
 						//textFieldArchivo.append(directorio + "\\" + str + "\n");
 					}
 				}
@@ -169,7 +170,7 @@ public class Principal extends JFrame {
 									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 										.addComponent(lblSeleccionMetodo)
 										.addComponent(textFieldMetodo, GroupLayout.PREFERRED_SIZE, 203, GroupLayout.PREFERRED_SIZE)))
-								.addComponent(textFieldArchivo, GroupLayout.PREFERRED_SIZE, 440, GroupLayout.PREFERRED_SIZE))
+								.addComponent(listArchivo, GroupLayout.PREFERRED_SIZE, 440, GroupLayout.PREFERRED_SIZE))
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_contentPane.createSequentialGroup()
 									.addGap(81)
@@ -190,7 +191,7 @@ public class Principal extends JFrame {
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGap(6)
-							.addComponent(textFieldArchivo, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE)
+							.addComponent(listArchivo, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE)
 							.addGap(3)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 								.addComponent(lblSeleccionClase)
