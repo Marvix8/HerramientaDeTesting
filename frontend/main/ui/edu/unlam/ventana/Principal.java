@@ -36,7 +36,6 @@ public class Principal extends JFrame {
 	private JPanel contentPane;
 	private JList<String> listClase;
 	private JList<String> listMetodo;
-	private JTextArea textAreaCodigo;
 	private JTextField textFieldDirectorioSeleccionado;
 	private HerramientaTesting ht;
 
@@ -95,10 +94,6 @@ public class Principal extends JFrame {
 		listMetodo = new JList<String>();
 		listMetodo.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		
-		textAreaCodigo = new JTextArea();
-		textAreaCodigo.setEditable(false);
-		textAreaCodigo.setColumns(10);
-		
 		JLabel lblCodigoMetodoSeleccionado = new JLabel("Código del método seleccionado:");
 		lblCodigoMetodoSeleccionado.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblCodigoMetodoSeleccionado.setForeground(Color.WHITE);
@@ -125,17 +120,30 @@ public class Principal extends JFrame {
 		lblDirectorioSeleccionado.setForeground(Color.WHITE);
 		lblDirectorioSeleccionado.setFont(new Font("Tahoma", Font.BOLD, 11));
 		
+		JPanel panelCodigoAnalizado = new JPanel();
+		panelCodigoAnalizado.setLayout(null);
+		
+		JTextArea textAreaCodigo = new JTextArea();
+		textAreaCodigo.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		textAreaCodigo.setEditable(false);
+		textAreaCodigo.setBounds(0, 0, 688, 250);
+		
+		JScrollPane scrollBar = new JScrollPane(textAreaCodigo);
+		scrollBar.setBounds(0, 0, 713, 250);
+		panelCodigoAnalizado.add(scrollBar);
+		
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addComponent(lblDirectorioSeleccionado)
 							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(textFieldDirectorioSeleccionado, GroupLayout.PREFERRED_SIZE, 286, GroupLayout.PREFERRED_SIZE))
-						.addComponent(textAreaCodigo, GroupLayout.DEFAULT_SIZE, 674, Short.MAX_VALUE)
+							.addComponent(textFieldDirectorioSeleccionado, GroupLayout.PREFERRED_SIZE, 286, GroupLayout.PREFERRED_SIZE)
+							.addGap(90)
+							.addComponent(lblAnalisisMetodo, GroupLayout.PREFERRED_SIZE, 119, GroupLayout.PREFERRED_SIZE))
 						.addComponent(lblCodigoMetodoSeleccionado)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -149,28 +157,23 @@ public class Principal extends JFrame {
 										.addComponent(lblSeleccionMetodo)
 										.addComponent(listMetodo, GroupLayout.PREFERRED_SIZE, 203, GroupLayout.PREFERRED_SIZE)))
 								.addComponent(listArchivo, GroupLayout.PREFERRED_SIZE, 440, GroupLayout.PREFERRED_SIZE))
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addGap(81)
-									.addComponent(lblAnalisisMetodo, GroupLayout.PREFERRED_SIZE, 119, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(layeredPane, GroupLayout.PREFERRED_SIZE, 266, GroupLayout.PREFERRED_SIZE)))))
-					.addContainerGap())
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(layeredPane, GroupLayout.PREFERRED_SIZE, 266, GroupLayout.PREFERRED_SIZE))
+						.addComponent(panelCodigoAnalizado, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+					.addContainerGap(21, Short.MAX_VALUE))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
+				.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblDirectorioSeleccionado, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
-						.addComponent(textFieldDirectorioSeleccionado, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblseleccionArchivo)
+						.addComponent(textFieldDirectorioSeleccionado, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblAnalisisMetodo))
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(lblseleccionArchivo)
 							.addGap(6)
 							.addComponent(listArchivo, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE)
 							.addGap(3)
@@ -179,16 +182,14 @@ public class Principal extends JFrame {
 								.addComponent(lblSeleccionMetodo))
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(listMetodo, GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
-								.addComponent(listClase, GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(layeredPane, GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)))
+								.addComponent(listMetodo, GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
+								.addComponent(listClase, GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)))
+						.addComponent(layeredPane, GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(lblCodigoMetodoSeleccionado)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(textAreaCodigo, GroupLayout.PREFERRED_SIZE, 247, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap())
+					.addComponent(panelCodigoAnalizado, GroupLayout.PREFERRED_SIZE, 250, GroupLayout.PREFERRED_SIZE)
+					.addGap(8))
 		);
 		
 		JLabel lblLineasCodigo = new JLabel("Líneas del código totales");
