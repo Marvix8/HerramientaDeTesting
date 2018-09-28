@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -29,14 +30,19 @@ public class HerramientaTesting {
 	private int complejidadCiclomatica;
 	private int cantidadComentarios;
 	private int cantidadLineas;
-	private double porcentajeComentarios;
+	private String porcentajeComentarios;
+	private Halstead halstead;
+	private Integer longitudHalstead; 
+	private String volumenHalstead;
+	private int lineaFin;
 	
 
 	private static final String []KEYWORDS = {"if", "while", "case", "for", "switch", "do", "continue", "break", "&&","||", "?", ":", "catch", "finally", "throw", "throws"};
 	private static final String TIPO_ARCHIVO = ".java";
 	private static final String CLASE_REGEX = "(?:\\S*)\\s*(?:class) (\\w*)\\s*\\S*";
-
-	public HerramientaTesting(String filename, String className) {
+	private static final String METODO_REGEX = "\\s([a-z][A-Za-z0-9]*)\\s*\\(([A-Z][A-Za-z0-9\\<\\>]*\\s+[a-z][A-Za-z0-9]*,?)*\\)";
+	
+	public HerramientaTesting(String filename) {
 		
 		try {
 			fileReader = new FileReader(filename);
@@ -44,25 +50,26 @@ public class HerramientaTesting {
 			this.fileContent = new ArrayList<String>();
 			this.lineasMetodoProcesado = new ArrayList<String>();
 			this.clasesArchivo = new ArrayList<String>();
-			this.className = className;
+			this.metodosClase = new ArrayList<String>();
 			this.complejidadCiclomatica = 1;
 			this.cantidadComentarios = 0;
 			this.cantidadLineas = 0;
-			this.porcentajeComentarios = 0;
+			this.porcentajeComentarios = "0,00";
+			this.longitudHalstead = 0;
+			this.volumenHalstead = "0,00";
+			this.halstead = new Halstead();			
 			
 			while(scanner.hasNextLine()) {
 				fileContent.add(scanner.nextLine());	
 			}
 			
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			try {
 				scanner.close();
 				fileReader.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -88,8 +95,8 @@ public class HerramientaTesting {
 	// Método que obtiene todas las clases de un archivo
 	public void obtenerClasesArchivo() {
 		Pattern patronClase =  Pattern.compile(CLASE_REGEX);
-		Matcher matcherClase = null; 
-		
+		Matcher matcherClase = null;
+		clasesArchivo.clear();
 		for (String str : fileContent) {
 			matcherClase = patronClase.matcher(str);
 			if(matcherClase.find()) {
@@ -99,11 +106,25 @@ public class HerramientaTesting {
 	}
 	
 	public void obtenerMetodosClase() {
-		
+		Pattern patronMetodo =  Pattern.compile(METODO_REGEX);
+		Matcher matcherMetodo = null; 
+		metodosClase.clear();
+		for (String str : fileContent) {
+			matcherMetodo = patronMetodo.matcher(str);
+			if(matcherMetodo.find()) {
+				metodosClase.add(matcherMetodo.group(1));
+			}
+		}
 	}
 	
 	public void resolver() {
 		int numeroLinea = 0;
+		lineasMetodoProcesado.clear();
+		this.cantidadComentarios = 0;
+		this.complejidadCiclomatica = 1;
+		this.cantidadLineas = 0;
+		this.longitudHalstead = 0;
+		this.volumenHalstead = "0,00";
 		
 		while(!fileContent.get(numeroLinea).contains(className)) {
 			numeroLinea++;
@@ -115,23 +136,21 @@ public class HerramientaTesting {
 		}
 
 		mcCabe(numeroLinea);
+		
+		halstead.procesar(fileContent, numeroLinea, this.lineaFin);
+		
 		calcularPorcentajeComentarios();
-	}
-	
-	public void mostrarResultado() {
-		for(String str : this.getLineasMetodoProcesado()) {
-			System.out.println(str);
-		}
-		System.out.println("La complejidad ciclomatica del metodo " + method + " de la clase " + className + " es: " + this.getComplejidadCiclomatica());
-		System.out.println("Cantidad de líneas: " + this.getCantidadLineas());
-		System.out.println("Cantidad de comentarios: " + this.getCantidadComentarios());
-		System.out.println("Porcentaje de comentarios: " + this.getPorcentajeComentarios());
+		
+		DecimalFormat df = new DecimalFormat("0.00");
+		this.volumenHalstead = df.format(halstead.getVolumenHalstead());
+		this.longitudHalstead = halstead.getLongitudHalstead();
+		
 	}
 	
 	private void mcCabe(int numeroLinea) {
 		int contadorLlaves = 0;
 		String linea = "";
-		
+	
 		do {
 			lineasMetodoProcesado.add(fileContent.get(numeroLinea));
 			linea = fileContent.get(numeroLinea);
@@ -156,6 +175,7 @@ public class HerramientaTesting {
 			numeroLinea++;
 			
 		} while(!fileContent.isEmpty() && contadorLlaves != 0);
+		this.lineaFin = numeroLinea;
 	}
 	
 	public String getMethod() {
@@ -167,7 +187,8 @@ public class HerramientaTesting {
 	}
 
 	private void calcularPorcentajeComentarios() {
-		this.porcentajeComentarios = Double.valueOf(100 * this.cantidadComentarios) / Double.valueOf(this.cantidadLineas);
+		DecimalFormat df = new DecimalFormat("0.00");
+		this.porcentajeComentarios = df.format(Double.valueOf(100 * this.cantidadComentarios) / Double.valueOf(this.cantidadLineas));
 	}
 
 	public int getComplejidadCiclomatica() {
@@ -194,11 +215,11 @@ public class HerramientaTesting {
 		this.cantidadLineas = cantidadLineas;
 	}
 
-	public double getPorcentajeComentarios() {
+	public String getPorcentajeComentarios() {
 		return porcentajeComentarios;
 	}
 
-	public void setPorcentajeComentarios(double porcentajeComentarios) {
+	public void setPorcentajeComentarios(String porcentajeComentarios) {
 		this.porcentajeComentarios = porcentajeComentarios;
 	}
 
@@ -216,7 +237,41 @@ public class HerramientaTesting {
 
 	public void setArchivosDirectorio(String[] archivosDirectorio) {
 		this.archivosDirectorio = archivosDirectorio;
+	}
+
+	public ArrayList<String> getClasesArchivo() {
+		return clasesArchivo;
+	}
+
+	public void setClasesArchivo(ArrayList<String> clasesArchivo) {
+		this.clasesArchivo = clasesArchivo;
+	}
+
+	public ArrayList<String> getMetodosClase() {
+		return metodosClase;
+	}
+
+	public void setMetodosClase(ArrayList<String> metodosClase) {
+		this.metodosClase = metodosClase;
+	}
+
+	public String getClassName() {
+		return className;
+	}
+
+	public void setClassName(String className) {
+		this.className = className;
+	}
+
+	public Integer getLongitudHalstead() {
+		return longitudHalstead;
+	}
+
+	public String getVolumenHalstead() {
+		return volumenHalstead;
 	}	
+	
+	
 	
 }
 

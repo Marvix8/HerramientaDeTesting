@@ -4,29 +4,41 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Toolkit;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
+import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
+
+import edu.unlam.herramienta_testing.Directory;
+import edu.unlam.herramienta_testing.HerramientaTesting;
 
 public class Principal extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	
 	private JPanel contentPane;
-	private JTextField textFieldArchivo;
-	private JTextField textFieldClase;
-	private JTextField textFieldMetodo;
-	private JTextField textFieldCodigo;
+	private JList<String> listClase;
+	private JList<String> listMetodo;
+	private JTextField textFieldDirectorioSeleccionado;
+	private HerramientaTesting ht;
+
 
 	/**
 	 * Launch the application.
@@ -49,11 +61,15 @@ public class Principal extends JFrame {
 	 */
 	public Principal() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Principal.class.getResource("/com/sun/java/swing/plaf/motif/icons/DesktopIcon.gif")));
-		setAlwaysOnTop(true);
 		setResizable(false);
 		setTitle("Herramienta de Testing");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(25, 25, 750, 700);
+		
+		contentPane = new JPanel();
+		contentPane.setBackground(Color.DARK_GRAY);
+		
+		setContentPane(contentPane);
 		
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setBackground(Color.BLACK);
@@ -64,23 +80,27 @@ public class Principal extends JFrame {
 		menuAnalisis.setForeground(Color.WHITE);
 		menuBar.add(menuAnalisis);
 		
-		JMenuItem opcionElegir = new JMenuItem("Elegir Carpeta");
-		menuAnalisis.add(opcionElegir);
+		textFieldDirectorioSeleccionado = new JTextField();
+		textFieldDirectorioSeleccionado.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		textFieldDirectorioSeleccionado.setEditable(false);
+		textFieldDirectorioSeleccionado.setColumns(10);
 		
-		JMenuItem opcionSalir = new JMenuItem("Salir");
-		menuAnalisis.add(opcionSalir);
-		contentPane = new JPanel();
-		contentPane.setBackground(Color.DARK_GRAY);
+		JList<String> listArchivo = new JList<String>();
+		listArchivo.setFont(new Font("Tahoma", Font.PLAIN, 11));
+
+		listClase = new JList<String>();
+		listClase.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		
-		setContentPane(contentPane);
+		listMetodo = new JList<String>();
+		listMetodo.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		
+		JLabel lblCodigoMetodoSeleccionado = new JLabel("Código del método seleccionado:");
+		lblCodigoMetodoSeleccionado.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblCodigoMetodoSeleccionado.setForeground(Color.WHITE);
+						
 		JLabel lblseleccionArchivo = new JLabel("Seleccione un archivo de la lista:");
 		lblseleccionArchivo.setForeground(Color.WHITE);
 		lblseleccionArchivo.setFont(new Font("Tahoma", Font.BOLD, 11));
-		
-		textFieldArchivo = new JTextField();
-		textFieldArchivo.setEditable(false);
-		textFieldArchivo.setColumns(10);
 		
 		JLabel lblSeleccionClase = new JLabel("Seleccione una clase de la lista: ");
 		lblSeleccionClase.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -90,81 +110,86 @@ public class Principal extends JFrame {
 		lblSeleccionMetodo.setForeground(Color.WHITE);
 		lblSeleccionMetodo.setFont(new Font("Tahoma", Font.BOLD, 11));
 		
-		textFieldClase = new JTextField();
-		textFieldClase.setEditable(false);
-		textFieldClase.setColumns(10);
-		
-		textFieldMetodo = new JTextField();
-		textFieldMetodo.setEditable(false);
-		textFieldMetodo.setColumns(10);
-		
-		JLabel lblNewLabel_3 = new JLabel("Código del método seleccionado:");
-		lblNewLabel_3.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblNewLabel_3.setForeground(Color.WHITE);
-		
-		textFieldCodigo = new JTextField();
-		textFieldCodigo.setEditable(false);
-		textFieldCodigo.setColumns(10);
-		
 		JLayeredPane layeredPane = new JLayeredPane();
 		
-		JLabel lblNewLabel = new JLabel("Análisis del Método");
-		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblNewLabel.setForeground(new Color(255, 255, 255));
+		JLabel lblAnalisisMetodo = new JLabel("Análisis del Método");
+		lblAnalisisMetodo.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblAnalisisMetodo.setForeground(new Color(255, 255, 255));
+		
+		JLabel lblDirectorioSeleccionado = new JLabel("Directorio Seleccionado:");
+		lblDirectorioSeleccionado.setForeground(Color.WHITE);
+		lblDirectorioSeleccionado.setFont(new Font("Tahoma", Font.BOLD, 11));
+		
+		JPanel panelCodigoAnalizado = new JPanel();
+		panelCodigoAnalizado.setLayout(null);
+		
+		JTextArea textAreaCodigo = new JTextArea();
+		textAreaCodigo.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		textAreaCodigo.setEditable(false);
+		textAreaCodigo.setBounds(0, 0, 688, 250);
+		
+		JScrollPane scrollBar = new JScrollPane(textAreaCodigo);
+		scrollBar.setBounds(0, 0, 713, 250);
+		panelCodigoAnalizado.add(scrollBar);
+		
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(textFieldCodigo, GroupLayout.DEFAULT_SIZE, 724, Short.MAX_VALUE)
-						.addComponent(lblNewLabel_3)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+							.addComponent(lblDirectorioSeleccionado)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(textFieldDirectorioSeleccionado, GroupLayout.PREFERRED_SIZE, 286, GroupLayout.PREFERRED_SIZE)
+							.addGap(90)
+							.addComponent(lblAnalisisMetodo, GroupLayout.PREFERRED_SIZE, 119, GroupLayout.PREFERRED_SIZE))
+						.addComponent(lblCodigoMetodoSeleccionado)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 								.addComponent(lblseleccionArchivo)
-								.addComponent(textFieldArchivo)
 								.addGroup(gl_contentPane.createSequentialGroup()
 									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 										.addComponent(lblSeleccionClase)
-										.addComponent(textFieldClase, GroupLayout.PREFERRED_SIZE, 203, GroupLayout.PREFERRED_SIZE))
+										.addComponent(listClase, GroupLayout.PREFERRED_SIZE, 203, GroupLayout.PREFERRED_SIZE))
 									.addGap(35)
 									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 										.addComponent(lblSeleccionMetodo)
-										.addComponent(textFieldMetodo, GroupLayout.PREFERRED_SIZE, 203, GroupLayout.PREFERRED_SIZE))))
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addGap(81)
-									.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 119, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(layeredPane, GroupLayout.PREFERRED_SIZE, 266, GroupLayout.PREFERRED_SIZE)))))
-					.addContainerGap())
+										.addComponent(listMetodo, GroupLayout.PREFERRED_SIZE, 203, GroupLayout.PREFERRED_SIZE)))
+								.addComponent(listArchivo, GroupLayout.PREFERRED_SIZE, 440, GroupLayout.PREFERRED_SIZE))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(layeredPane, GroupLayout.PREFERRED_SIZE, 266, GroupLayout.PREFERRED_SIZE))
+						.addComponent(panelCodigoAnalizado, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+					.addContainerGap(21, Short.MAX_VALUE))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
+				.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblseleccionArchivo)
-						.addComponent(lblNewLabel))
+						.addComponent(lblDirectorioSeleccionado, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
+						.addComponent(textFieldDirectorioSeleccionado, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblAnalisisMetodo))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(textFieldArchivo, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(lblseleccionArchivo)
+							.addGap(6)
+							.addComponent(listArchivo, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE)
+							.addGap(3)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 								.addComponent(lblSeleccionClase)
 								.addComponent(lblSeleccionMetodo))
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(textFieldMetodo, GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
-								.addComponent(textFieldClase, GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)))
-						.addComponent(layeredPane, GroupLayout.PREFERRED_SIZE, 321, GroupLayout.PREFERRED_SIZE))
+								.addComponent(listMetodo, GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
+								.addComponent(listClase, GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)))
+						.addComponent(layeredPane, GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(lblNewLabel_3)
+					.addComponent(lblCodigoMetodoSeleccionado)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(textFieldCodigo, GroupLayout.PREFERRED_SIZE, 247, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap())
+					.addComponent(panelCodigoAnalizado, GroupLayout.PREFERRED_SIZE, 250, GroupLayout.PREFERRED_SIZE)
+					.addGap(8))
 		);
 		
 		JLabel lblLineasCodigo = new JLabel("Líneas del código totales");
@@ -206,12 +231,12 @@ public class Principal extends JFrame {
 		lblPorcentajeDeLneas.setBounds(0, 82, 266, 14);
 		layeredPane.add(lblPorcentajeDeLneas);
 		
-		JLabel label_4 = new JLabel("");
-		label_4.setHorizontalAlignment(SwingConstants.CENTER);
-		label_4.setForeground(Color.ORANGE);
-		label_4.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		label_4.setBounds(0, 139, 266, 14);
-		layeredPane.add(label_4);
+		JLabel labelCantComplejidadCiclomatica = new JLabel("");
+		labelCantComplejidadCiclomatica.setHorizontalAlignment(SwingConstants.CENTER);
+		labelCantComplejidadCiclomatica.setForeground(Color.ORANGE);
+		labelCantComplejidadCiclomatica.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		labelCantComplejidadCiclomatica.setBounds(0, 139, 266, 14);
+		layeredPane.add(labelCantComplejidadCiclomatica);
 		
 		JLabel lblComplejidadCiclomatica = new JLabel("Complejidad Ciclomática");
 		lblComplejidadCiclomatica.setHorizontalAlignment(SwingConstants.CENTER);
@@ -264,13 +289,113 @@ public class Principal extends JFrame {
 		lblHalsteadVolumen.setBounds(0, 280, 266, 14);
 		layeredPane.add(lblHalsteadVolumen);
 		
-		JLabel labelCantHalsteadVolument = new JLabel("");
-		labelCantHalsteadVolument.setHorizontalAlignment(SwingConstants.CENTER);
-		labelCantHalsteadVolument.setForeground(Color.ORANGE);
-		labelCantHalsteadVolument.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		labelCantHalsteadVolument.setBounds(0, 296, 266, 14);
-		layeredPane.add(labelCantHalsteadVolument);
+		JLabel labelCantHalsteadVolumen = new JLabel("");
+		labelCantHalsteadVolumen.setHorizontalAlignment(SwingConstants.CENTER);
+		labelCantHalsteadVolumen.setForeground(Color.ORANGE);
+		labelCantHalsteadVolumen.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		labelCantHalsteadVolumen.setBounds(0, 296, 266, 14);
+		layeredPane.add(labelCantHalsteadVolumen);
 		contentPane.setLayout(gl_contentPane);
+		
+		DefaultListModel<String> listaModelArchivo = new DefaultListModel<String>();
+		listaModelArchivo.addElement( "Seleccione una carpeta con archivos .java desde el menú Análisis -> Elegir Carpeta...");
+		listArchivo.setModel(listaModelArchivo);
+		
+		JMenuItem opcionElegir = new JMenuItem("Elegir Carpeta");
+		opcionElegir.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				String directorio = obtenerDirectorio();
+				Directory directory = new Directory(directorio);
+				ArrayList<String> archivo = directory.getFilesList();
+				textFieldDirectorioSeleccionado.setText(directorio);
+				if(archivo != null) {
+					listaModelArchivo.removeAllElements();
+					for (String str : archivo) {
+						listaModelArchivo.addElement(str);
+					}
+				}
+			}
+		});
+		menuAnalisis.add(opcionElegir);
+		
+		DefaultListModel<String> listaModelClase = new DefaultListModel<String>();
+		listClase.setModel(listaModelClase);
+		
+		listArchivo.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				String dirArchivo = textFieldDirectorioSeleccionado.getText() + "\\" + listArchivo.getSelectedValue();
+				ht = new HerramientaTesting(dirArchivo);
+				ht.obtenerClasesArchivo();
+				ArrayList<String> clasesArchivo = ht.getClasesArchivo();
+				listaModelClase.removeAllElements();
+				for(String str : clasesArchivo) {
+					listaModelClase.addElement(str);
+				}
+			}
+		});
+		
+		DefaultListModel<String> listaModelMetodo = new DefaultListModel<String>();
+		listMetodo.setModel(listaModelMetodo);
+		
+		listClase.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				ht.setClassName(listClase.getSelectedValue());
+				ht.obtenerMetodosClase();
+				ArrayList<String> metodosClase = ht.getMetodosClase();
+				listaModelMetodo.removeAllElements();
+				for(String str : metodosClase) {
+					listaModelMetodo.addElement(str);
+				}
+			}
+		});
+		
+		listMetodo.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				textAreaCodigo.replaceRange("", 0, textAreaCodigo.getText().length());
+				ht.setMethod(listMetodo.getSelectedValue());
+				ht.resolver();
+				ArrayList<String> lineasMetodoProcesado = ht.getLineasMetodoProcesado();
+				for(String str : lineasMetodoProcesado) {
+					textAreaCodigo.append(str + "\n");
+				}
+				
+				labelCantLineasCodigo.setText(String.valueOf(ht.getCantidadLineas()));
+				labelCantComentadas.setText(String.valueOf(ht.getCantidadComentarios()));
+				labelPorcentajeComentadas.setText(String.valueOf(ht.getPorcentajeComentarios()));
+				labelCantComplejidadCiclomatica.setText(String.valueOf(ht.getComplejidadCiclomatica()));
+				labelCantHalsteadLongitud.setText(String.valueOf(ht.getLongitudHalstead()));
+				labelCantHalsteadVolumen.setText(String.valueOf(ht.getVolumenHalstead()));
+			}
+		});
+		
+		JMenuItem opcionSalir = new JMenuItem("Salir");
+		opcionSalir.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				dispose();
+	            System.exit(0);
+			}
+		});
+		menuAnalisis.add(opcionSalir);
+	}
+	
+	private String obtenerDirectorio() {
+		String directorioObtenido;
+		JFileChooser chooser = new JFileChooser();
+	    chooser.setCurrentDirectory(new java.io.File("."));
+	    chooser.setDialogTitle("Seleccione el directorio");
+	    chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+	    chooser.setAcceptAllFileFilterUsed(false);
 
+	    if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+	    	directorioObtenido = chooser.getSelectedFile().toString();
+	    	return directorioObtenido;
+	    } else {
+	    	return null;
+	    }
 	}
 }
