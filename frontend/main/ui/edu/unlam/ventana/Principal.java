@@ -289,12 +289,12 @@ public class Principal extends JFrame {
 		lblHalsteadVolumen.setBounds(0, 280, 266, 14);
 		layeredPane.add(lblHalsteadVolumen);
 		
-		JLabel labelCantHalsteadVolument = new JLabel("");
-		labelCantHalsteadVolument.setHorizontalAlignment(SwingConstants.CENTER);
-		labelCantHalsteadVolument.setForeground(Color.ORANGE);
-		labelCantHalsteadVolument.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		labelCantHalsteadVolument.setBounds(0, 296, 266, 14);
-		layeredPane.add(labelCantHalsteadVolument);
+		JLabel labelCantHalsteadVolumen = new JLabel("");
+		labelCantHalsteadVolumen.setHorizontalAlignment(SwingConstants.CENTER);
+		labelCantHalsteadVolumen.setForeground(Color.ORANGE);
+		labelCantHalsteadVolumen.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		labelCantHalsteadVolumen.setBounds(0, 296, 266, 14);
+		layeredPane.add(labelCantHalsteadVolumen);
 		contentPane.setLayout(gl_contentPane);
 		
 		DefaultListModel<String> listaModelArchivo = new DefaultListModel<String>();
@@ -367,7 +367,8 @@ public class Principal extends JFrame {
 				labelCantComentadas.setText(String.valueOf(ht.getCantidadComentarios()));
 				labelPorcentajeComentadas.setText(String.valueOf(ht.getPorcentajeComentarios()));
 				labelCantComplejidadCiclomatica.setText(String.valueOf(ht.getComplejidadCiclomatica()));
-				
+				labelCantHalsteadLongitud.setText(String.valueOf(ht.getLongitudHalstead()));
+				labelCantHalsteadVolumen.setText(String.valueOf(ht.getVolumenHalstead()));
 			}
 		});
 		

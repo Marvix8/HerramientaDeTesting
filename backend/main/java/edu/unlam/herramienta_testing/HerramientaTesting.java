@@ -7,9 +7,7 @@ import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,6 +31,10 @@ public class HerramientaTesting {
 	private int cantidadComentarios;
 	private int cantidadLineas;
 	private String porcentajeComentarios;
+	private Halstead halstead;
+	private Integer longitudHalstead; 
+	private String volumenHalstead;
+	private int lineaFin;
 	
 
 	private static final String []KEYWORDS = {"if", "while", "case", "for", "switch", "do", "continue", "break", "&&","||", "?", ":", "catch", "finally", "throw", "throws"};
@@ -52,7 +54,10 @@ public class HerramientaTesting {
 			this.complejidadCiclomatica = 1;
 			this.cantidadComentarios = 0;
 			this.cantidadLineas = 0;
-			this.porcentajeComentarios = "0.00";
+			this.porcentajeComentarios = "0,00";
+			this.longitudHalstead = 0;
+			this.volumenHalstead = "0,00";
+			this.halstead = new Halstead();			
 			
 			while(scanner.hasNextLine()) {
 				fileContent.add(scanner.nextLine());	
@@ -114,6 +119,12 @@ public class HerramientaTesting {
 	
 	public void resolver() {
 		int numeroLinea = 0;
+		lineasMetodoProcesado.clear();
+		this.cantidadComentarios = 0;
+		this.complejidadCiclomatica = 1;
+		this.cantidadLineas = 0;
+		this.longitudHalstead = 0;
+		this.volumenHalstead = "0,00";
 		
 		while(!fileContent.get(numeroLinea).contains(className)) {
 			numeroLinea++;
@@ -125,17 +136,21 @@ public class HerramientaTesting {
 		}
 
 		mcCabe(numeroLinea);
+		
+		halstead.procesar(fileContent, numeroLinea, this.lineaFin);
+		
 		calcularPorcentajeComentarios();
+		
+		DecimalFormat df = new DecimalFormat("0.00");
+		this.volumenHalstead = df.format(halstead.getVolumenHalstead());
+		this.longitudHalstead = halstead.getLongitudHalstead();
+		
 	}
 	
 	private void mcCabe(int numeroLinea) {
 		int contadorLlaves = 0;
 		String linea = "";
-		lineasMetodoProcesado.clear();
-		this.cantidadComentarios = 0;
-		this.complejidadCiclomatica = 1;
-		this.cantidadLineas = 0;
-		
+	
 		do {
 			lineasMetodoProcesado.add(fileContent.get(numeroLinea));
 			linea = fileContent.get(numeroLinea);
@@ -160,6 +175,7 @@ public class HerramientaTesting {
 			numeroLinea++;
 			
 		} while(!fileContent.isEmpty() && contadorLlaves != 0);
+		this.lineaFin = numeroLinea;
 	}
 	
 	public String getMethod() {
@@ -245,7 +261,17 @@ public class HerramientaTesting {
 
 	public void setClassName(String className) {
 		this.className = className;
+	}
+
+	public Integer getLongitudHalstead() {
+		return longitudHalstead;
+	}
+
+	public String getVolumenHalstead() {
+		return volumenHalstead;
 	}	
+	
+	
 	
 }
 

@@ -1,8 +1,7 @@
 package edu.unlam.herramienta_testing;
 
-import java.util.List;
 import java.util.ArrayList;
-import java.util.HashSet; 
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -134,7 +133,15 @@ public class Halstead {
  
         return String.format("Longitud: %d - Volumen: %.2f - (Operadores %d - Operandos %d)",  
                longitudHalstead, volumenHalstead, cantidadOperadores, cantidadOperandos); 
-    } 
+    }
+
+	public Integer getLongitudHalstead() {
+		return longitudHalstead;
+	}
+
+	public Double getVolumenHalstead() {
+		return volumenHalstead;
+	} 
  
     
      
