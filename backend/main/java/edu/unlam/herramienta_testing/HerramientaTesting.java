@@ -30,11 +30,17 @@ public class HerramientaTesting {
 	private int cantidadComentarios;
 	private int cantidadLineas;
 	private double porcentajeComentarios;
+	private int fanOut;
+	private int fanIn;
 	
 
 	private static final String []KEYWORDS = {"if", "while", "case", "for", "switch", "do", "continue", "break", "&&","||", "?", ":", "catch", "finally", "throw", "throws"};
 	private static final String TIPO_ARCHIVO = ".java";
 	private static final String CLASE_REGEX = "(?:\\S*)\\s*(?:class) (\\w*)\\s*\\S*";
+	//private static final String FANIN_REGEX = "(\\.[\\s\\n\\r]*[\\w]+)[\\s\\n\\r]*(?=\\(.*\\))";
+	private static final String FANIN_REGEX =  "*(?=\\(.*\\)\\s*[^ {])";
+	private static final String FANOUT_REGEX = "(?!\\bif\\b|\\bfor\\b|\\bwhile\\b|\\bswitch\\b|\\btry\\b|\\bcatch\\b)(\\b[\\w]+\\b)[\\s\\n\\r]*(?=\\(.*\\))";
+
 
 	public HerramientaTesting(String filename, String className) {
 		
@@ -128,6 +134,25 @@ public class HerramientaTesting {
 		System.out.println("Porcentaje de comentarios: " + this.getPorcentajeComentarios());
 	}
 	
+	public void calcularFanIn() {
+		for (String s :  fileContent) {
+		    Pattern patronFanIn = Pattern.compile(this.method + FANIN_REGEX);
+		    Matcher m = patronFanIn.matcher(s);
+		    if(m.find()){
+		        fanIn++;
+		    }
+		}
+	}
+	
+	public void calcularFanOut() {
+		for (String s :  lineasMetodoProcesado.subList(1, lineasMetodoProcesado.size())) {
+		    Pattern patronFanOut = Pattern.compile(FANOUT_REGEX);
+		    Matcher m = patronFanOut.matcher(s);
+		    if(m.find()){
+		        fanOut++;
+		    }
+		}
+	}
 	private void mcCabe(int numeroLinea) {
 		int contadorLlaves = 0;
 		String linea = "";
@@ -165,7 +190,14 @@ public class HerramientaTesting {
 	public void setMethod(String method) {
 		this.method = method;
 	}
-
+	
+	public void mostrarFanInFanOut() {
+		calcularFanIn();
+		calcularFanOut();
+		System.out.println(this.fanIn);
+		System.out.println(this.fanOut);
+	
+	}
 	private void calcularPorcentajeComentarios() {
 		this.porcentajeComentarios = Double.valueOf(100 * this.cantidadComentarios) / Double.valueOf(this.cantidadLineas);
 	}

@@ -29,7 +29,7 @@ public class Triangulo {
 		}
 		return false;
 	}
-	
+	 
 	public String obtenerTipo() {
 		if ( trianguloValido() ){
 			if (this.lado1 == this.lado2 
@@ -48,7 +48,11 @@ public class Triangulo {
 		}
 		
 		return "INVALIDO";
+		caca();
+		
 	}
 	
-	
+	obtenerTipo();
+obtenerTipo();
+
 }

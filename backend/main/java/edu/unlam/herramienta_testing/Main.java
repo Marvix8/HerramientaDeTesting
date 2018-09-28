@@ -12,7 +12,10 @@ public class Main {
 		String metodo;
 		
 		HerramientaTesting mcCabe = new HerramientaTesting("./input/Triangulo.java", "Triangulo");
+		
 		mcCabe.setMethod("obtenerTipo");
+		
+		
 		
 		//mcCabe.obtenerArchivosCarpeta("F:\\eclipse-workspace\\HerramientaDeTesting\\backend\\main\\java\\edu\\unlam\\herramienta_testing");
 		mcCabe.obtenerClasesArchivo();
@@ -29,6 +32,8 @@ public class Main {
 		
 		HerramientaTesting mcCabe = new HerramientaTesting(ruta, clase, metodo);*/
 		mcCabe.resolver();
+		mcCabe.mostrarFanInFanOut();
+		
 		mcCabe.mostrarResultado();
 		//mcCabe.imprimirResultado("./output/resultado.txt");
 		
