@@ -6,7 +6,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,13 +32,13 @@ public class HerramientaTesting {
 	private int complejidadCiclomatica;
 	private int cantidadComentarios;
 	private int cantidadLineas;
-	private double porcentajeComentarios;
+	private String porcentajeComentarios;
 	
 
 	private static final String []KEYWORDS = {"if", "while", "case", "for", "switch", "do", "continue", "break", "&&","||", "?", ":", "catch", "finally", "throw", "throws"};
 	private static final String TIPO_ARCHIVO = ".java";
 	private static final String CLASE_REGEX = "(?:\\S*)\\s*(?:class) (\\w*)\\s*\\S*";
-	private static final String METODO_REGEX = "(?:public|protected|private)(?:\\s*)?(?:\\w*)(?:\\s)(\\w*)(?:\\s*)\\((?:.*)?\\)\\s*\\{";
+	private static final String METODO_REGEX = "\\s([a-z][A-Za-z0-9]*)\\s*\\(([A-Z][A-Za-z0-9\\<\\>]*\\s+[a-z][A-Za-z0-9]*,?)*\\)";
 	
 	public HerramientaTesting(String filename) {
 		
@@ -49,7 +52,7 @@ public class HerramientaTesting {
 			this.complejidadCiclomatica = 1;
 			this.cantidadComentarios = 0;
 			this.cantidadLineas = 0;
-			this.porcentajeComentarios = 0;
+			this.porcentajeComentarios = "0.00";
 			
 			while(scanner.hasNextLine()) {
 				fileContent.add(scanner.nextLine());	
@@ -125,16 +128,6 @@ public class HerramientaTesting {
 		calcularPorcentajeComentarios();
 	}
 	
-	public void mostrarResultado() {
-		for(String str : this.getLineasMetodoProcesado()) {
-			System.out.println(str);
-		}
-		System.out.println("La complejidad ciclomatica del metodo " + method + " de la clase " + className + " es: " + this.getComplejidadCiclomatica());
-		System.out.println("Cantidad de líneas: " + this.getCantidadLineas());
-		System.out.println("Cantidad de comentarios: " + this.getCantidadComentarios());
-		System.out.println("Porcentaje de comentarios: " + this.getPorcentajeComentarios());
-	}
-	
 	private void mcCabe(int numeroLinea) {
 		int contadorLlaves = 0;
 		String linea = "";
@@ -178,7 +171,8 @@ public class HerramientaTesting {
 	}
 
 	private void calcularPorcentajeComentarios() {
-		this.porcentajeComentarios = Double.valueOf(100 * this.cantidadComentarios) / Double.valueOf(this.cantidadLineas);
+		DecimalFormat df = new DecimalFormat("0.00");
+		this.porcentajeComentarios = df.format(Double.valueOf(100 * this.cantidadComentarios) / Double.valueOf(this.cantidadLineas));
 	}
 
 	public int getComplejidadCiclomatica() {
@@ -205,11 +199,11 @@ public class HerramientaTesting {
 		this.cantidadLineas = cantidadLineas;
 	}
 
-	public double getPorcentajeComentarios() {
+	public String getPorcentajeComentarios() {
 		return porcentajeComentarios;
 	}
 
-	public void setPorcentajeComentarios(double porcentajeComentarios) {
+	public void setPorcentajeComentarios(String porcentajeComentarios) {
 		this.porcentajeComentarios = porcentajeComentarios;
 	}
 
