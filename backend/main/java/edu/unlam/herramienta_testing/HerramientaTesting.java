@@ -55,6 +55,8 @@ public class HerramientaTesting {
 			this.cantidadComentarios = 0;
 			this.cantidadLineas = 0;
 			this.porcentajeComentarios = 0;
+			this.fanOut = 0;
+			this.fanIn = 0;
 			
 			while(scanner.hasNextLine()) {
 				fileContent.add(scanner.nextLine());	

@@ -30,12 +30,12 @@ public class Triangulo {
 		return false;
 	}
 	 
-	public String obtenerTipo() {
+	public String obtenerTipo(){
 		if ( trianguloValido() ){
 			if (this.lado1 == this.lado2 
 					&& this.lado1 == this.lado3) {
 				this.tipoTriangulo = "EQUILATERO";
-			} 
+			}
 			// soy un comentario bonito
 			else if(this.lado1 != this.lado2 
 					&& this.lado1 != this.lado3 
@@ -51,8 +51,4 @@ public class Triangulo {
 		caca();
 		
 	}
-	
-	obtenerTipo();
-obtenerTipo();
-
 }
