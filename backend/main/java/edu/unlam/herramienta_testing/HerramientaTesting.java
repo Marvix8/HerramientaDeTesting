@@ -30,20 +30,26 @@ public class HerramientaTesting {
 	private int complejidadCiclomatica;
 	private int cantidadComentarios;
 	private int cantidadLineas;
+
 	private String porcentajeComentarios;
 	private Halstead halstead;
 	private Integer longitudHalstead; 
 	private String volumenHalstead;
 	private int lineaFin;
+	private int fanOut;
+	private int fanIn;
 	
-
 	private static final String []KEYWORDS = {"if", "while", "case", "for", "switch", "do", "continue", "break", "&&","||", "?", ":", "catch", "finally", "throw", "throws"};
 	private static final String TIPO_ARCHIVO = ".java";
 	private static final String CLASE_REGEX = "(?:\\S*)\\s*(?:class) (\\w*)\\s*\\S*";
+
 	private static final String METODO_REGEX = "\\s([a-z][A-Za-z0-9]*)\\s*\\(([A-Z][A-Za-z0-9\\<\\>]*\\s+[a-z][A-Za-z0-9]*,?)*\\)";
-	
+
+	private static final String FANIN_REGEX =  "*(?=\\(.*\\)\\s*[^ {])";
+	private static final String FANOUT_REGEX = "(?!\\bif\\b|\\bfor\\b|\\bwhile\\b|\\bswitch\\b|\\btry\\b|\\bcatch\\b)(\\b[\\w]+\\b)[\\s\\n\\r]*(?=\\(.*\\))";
+	//private static final String FANIN_REGEX = "(\\.[\\s\\n\\r]*[\\w]+)[\\s\\n\\r]*(?=\\(.*\\))";
+
 	public HerramientaTesting(String filename) {
-		
 		try {
 			fileReader = new FileReader(filename);
 			scanner = new Scanner(fileReader);
@@ -58,6 +64,8 @@ public class HerramientaTesting {
 			this.longitudHalstead = 0;
 			this.volumenHalstead = "0,00";
 			this.halstead = new Halstead();			
+			this.fanOut = 0;
+			this.fanIn = 0;
 			
 			while(scanner.hasNextLine()) {
 				fileContent.add(scanner.nextLine());	
@@ -147,6 +155,26 @@ public class HerramientaTesting {
 		
 	}
 	
+	public void calcularFanIn() {
+		for (String s :  fileContent) {
+		    Pattern patronFanIn = Pattern.compile(this.method + FANIN_REGEX);
+		    Matcher m = patronFanIn.matcher(s);
+		    if(m.find()){
+		        fanIn++;
+		    }
+		}
+	}
+	
+	public void calcularFanOut() {
+		for (String s :  lineasMetodoProcesado.subList(1, lineasMetodoProcesado.size())) {
+		    Pattern patronFanOut = Pattern.compile(FANOUT_REGEX);
+		    Matcher m = patronFanOut.matcher(s);
+		    if(m.find()){
+		        fanOut++;
+		    }
+		}
+	}
+	
 	private void mcCabe(int numeroLinea) {
 		int contadorLlaves = 0;
 		String linea = "";
@@ -185,7 +213,14 @@ public class HerramientaTesting {
 	public void setMethod(String method) {
 		this.method = method;
 	}
-
+	
+	public void mostrarFanInFanOut() {
+		calcularFanIn();
+		calcularFanOut();
+		System.out.println(this.fanIn);
+		System.out.println(this.fanOut);
+	
+	}
 	private void calcularPorcentajeComentarios() {
 		DecimalFormat df = new DecimalFormat("0.00");
 		this.porcentajeComentarios = df.format(Double.valueOf(100 * this.cantidadComentarios) / Double.valueOf(this.cantidadLineas));
