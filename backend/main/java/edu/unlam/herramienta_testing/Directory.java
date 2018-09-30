@@ -8,7 +8,6 @@ public class Directory {
 	private ArrayList<String> filesList;
 	
 	public Directory(String path) {
-		
 		this.filesList = new ArrayList<String>();
 		
 		searchFilesIntoPath(path);
@@ -20,8 +19,7 @@ public class Directory {
 		
 		for (String fileOrDirectoryName: dir.list()) {
 			
-			String subPath = path + "/" + fileOrDirectoryName;
-			
+			String subPath = path + "\\" + fileOrDirectoryName;
 			File subDir = new File(subPath);
 			
 			if(subDir.isDirectory()) {

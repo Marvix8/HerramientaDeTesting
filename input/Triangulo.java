@@ -48,7 +48,5 @@ public class Triangulo {
 		}
 		
 		return "INVALIDO";
-		caca();
-		
 	}
 }

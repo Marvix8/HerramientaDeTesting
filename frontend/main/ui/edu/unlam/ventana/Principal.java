@@ -25,6 +25,8 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import edu.unlam.herramienta_testing.Directory;
 import edu.unlam.herramienta_testing.HerramientaTesting;
@@ -34,10 +36,8 @@ public class Principal extends JFrame {
 	private static final long serialVersionUID = 1L;
 	
 	private JPanel contentPane;
-	private JList<String> listClase;
-	private JList<String> listMetodo;
 	private JTextField textFieldDirectorioSeleccionado;
-	private HerramientaTesting ht;
+	private static HerramientaTesting ht;
 
 
 	/**
@@ -85,15 +85,6 @@ public class Principal extends JFrame {
 		textFieldDirectorioSeleccionado.setEditable(false);
 		textFieldDirectorioSeleccionado.setColumns(10);
 		
-		JList<String> listArchivo = new JList<String>();
-		listArchivo.setFont(new Font("Tahoma", Font.PLAIN, 11));
-
-		listClase = new JList<String>();
-		listClase.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		
-		listMetodo = new JList<String>();
-		listMetodo.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		
 		JLabel lblCodigoMetodoSeleccionado = new JLabel("Código del método seleccionado:");
 		lblCodigoMetodoSeleccionado.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblCodigoMetodoSeleccionado.setForeground(Color.WHITE);
@@ -128,9 +119,42 @@ public class Principal extends JFrame {
 		textAreaCodigo.setEditable(false);
 		textAreaCodigo.setBounds(0, 0, 688, 250);
 		
-		JScrollPane scrollBar = new JScrollPane(textAreaCodigo);
-		scrollBar.setBounds(0, 0, 713, 250);
-		panelCodigoAnalizado.add(scrollBar);
+		JScrollPane scrollBarAreaCodigo = new JScrollPane(textAreaCodigo);
+		scrollBarAreaCodigo.setBounds(0, 0, 713, 250);
+		panelCodigoAnalizado.add(scrollBarAreaCodigo);
+		
+		JPanel panelArchivoLista = new JPanel();
+		panelArchivoLista.setLayout(null);
+		
+		JList<String> listArchivo = new JList<String>();
+		listArchivo.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		listArchivo.setBounds(0, 0, 440, 115);
+		
+		JScrollPane scrollBarListArchivo = new JScrollPane(listArchivo);
+		scrollBarListArchivo.setBounds(0, 0, 442, 115);
+		panelArchivoLista.add(scrollBarListArchivo);
+		
+		JPanel panelListClase = new JPanel();
+		panelListClase.setLayout(null);
+		
+		JList<String> listClase = new JList<String>();
+		listClase.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		listClase.setBounds(0, 0, 200, 164);
+		
+		JScrollPane scrollPaneListClase = new JScrollPane(listClase);
+		scrollPaneListClase.setBounds(0, 0, 200, 164);
+		panelListClase.add(scrollPaneListClase);
+		
+		JPanel panelListMetodo = new JPanel();
+		panelListMetodo.setLayout(null);
+		
+		JList<String> listMetodo = new JList<String>();
+		listMetodo.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		listMetodo.setBounds(0, 0, 203, 163);
+		
+		JScrollPane scrollPaneListMetodo = new JScrollPane(listMetodo);
+		scrollPaneListMetodo.setBounds(0, 0, 203, 163);
+		panelListMetodo.add(scrollPaneListMetodo);
 		
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
@@ -151,20 +175,20 @@ public class Principal extends JFrame {
 								.addGroup(gl_contentPane.createSequentialGroup()
 									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 										.addComponent(lblSeleccionClase)
-										.addComponent(listClase, GroupLayout.PREFERRED_SIZE, 203, GroupLayout.PREFERRED_SIZE))
-									.addGap(35)
+										.addComponent(panelListClase, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE))
+									.addGap(38)
 									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addComponent(lblSeleccionMetodo)
-										.addComponent(listMetodo, GroupLayout.PREFERRED_SIZE, 203, GroupLayout.PREFERRED_SIZE)))
-								.addComponent(listArchivo, GroupLayout.PREFERRED_SIZE, 440, GroupLayout.PREFERRED_SIZE))
+										.addComponent(panelListMetodo, GroupLayout.PREFERRED_SIZE, 203, GroupLayout.PREFERRED_SIZE)
+										.addComponent(lblSeleccionMetodo)))
+								.addComponent(panelArchivoLista, GroupLayout.PREFERRED_SIZE, 442, GroupLayout.PREFERRED_SIZE))
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(layeredPane, GroupLayout.PREFERRED_SIZE, 266, GroupLayout.PREFERRED_SIZE))
 						.addComponent(panelCodigoAnalizado, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-					.addContainerGap(21, Short.MAX_VALUE))
+					.addContainerGap(20, Short.MAX_VALUE))
 		);
 		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+			gl_contentPane.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblDirectorioSeleccionado, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
@@ -174,16 +198,16 @@ public class Principal extends JFrame {
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addComponent(lblseleccionArchivo)
-							.addGap(6)
-							.addComponent(listArchivo, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE)
-							.addGap(3)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(panelArchivoLista, GroupLayout.PREFERRED_SIZE, 115, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 								.addComponent(lblSeleccionClase)
 								.addComponent(lblSeleccionMetodo))
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(listMetodo, GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
-								.addComponent(listClase, GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)))
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+								.addComponent(panelListClase, GroupLayout.PREFERRED_SIZE, 164, GroupLayout.PREFERRED_SIZE)
+								.addComponent(panelListMetodo, GroupLayout.PREFERRED_SIZE, 163, GroupLayout.PREFERRED_SIZE)))
 						.addComponent(layeredPane, GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(lblCodigoMetodoSeleccionado)
@@ -301,6 +325,70 @@ public class Principal extends JFrame {
 		listaModelArchivo.addElement( "Seleccione una carpeta con archivos .java desde el menú Análisis -> Elegir Carpeta...");
 		listArchivo.setModel(listaModelArchivo);
 		
+		DefaultListModel<String> listaModelClase = new DefaultListModel<String>();
+		listClase.setModel(listaModelClase);
+		
+		listArchivo.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent lse) {
+				if(listArchivo.getSelectedValue() != null) {
+					String dirArchivo = textFieldDirectorioSeleccionado.getText() + "\\" + listArchivo.getSelectedValue();
+					ht = new HerramientaTesting(dirArchivo);
+					ht.obtenerClasesArchivo();
+					ArrayList<String> clasesArchivo = ht.getClasesArchivo();
+					listaModelClase.removeAllElements();
+					for(String str : clasesArchivo) {
+						listaModelClase.addElement(str);
+					}					
+				}
+			}
+		});
+		
+		DefaultListModel<String> listaModelMetodo = new DefaultListModel<String>();
+		listMetodo.setModel(listaModelMetodo);
+		
+		listClase.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent lse) {
+				if(listClase.getSelectedValue() != null) {
+					ht.setClassName(listClase.getSelectedValue());
+					ht.obtenerMetodosClase();
+					ArrayList<String> metodosClase = ht.getMetodosClase();
+					listaModelMetodo.removeAllElements();
+					textAreaCodigo.setText("");
+					for(String str : metodosClase) {
+						listaModelMetodo.addElement(str);
+					}
+				}
+			}
+		});
+		
+		listMetodo.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent lse) {
+				if(listMetodo.getSelectedValue() != null) {
+					textAreaCodigo.setText("");
+					ht.setMethod(listMetodo.getSelectedValue());
+					ht.resolver();
+					ArrayList<String> lineasMetodoProcesado = ht.getLineasMetodoProcesado();
+					for(String str : lineasMetodoProcesado) {
+						textAreaCodigo.append(str + "\n");
+					}
+					
+					labelCantLineasCodigo.setText(String.valueOf(ht.getCantidadLineas()));
+					labelCantComentadas.setText(String.valueOf(ht.getCantidadComentarios()));
+					labelPorcentajeComentadas.setText(String.valueOf(ht.getPorcentajeComentarios()));
+					labelCantComplejidadCiclomatica.setText(String.valueOf(ht.getComplejidadCiclomatica()));
+					
+					labelCantFanIn.setText(String.valueOf(ht.getFanIn()));
+					labelCantFanOut.setText(String.valueOf(ht.getFanOut()));
+					
+					labelCantHalsteadLongitud.setText(String.valueOf(ht.getLongitudHalstead()));
+					labelCantHalsteadVolumen.setText(String.valueOf(ht.getVolumenHalstead()));
+				}
+			}
+		});
+		
 		JMenuItem opcionElegir = new JMenuItem("Elegir Carpeta");
 		opcionElegir.addMouseListener(new MouseAdapter() {
 			@Override
@@ -309,8 +397,12 @@ public class Principal extends JFrame {
 				Directory directory = new Directory(directorio);
 				ArrayList<String> archivo = directory.getFilesList();
 				textFieldDirectorioSeleccionado.setText(directorio);
+				listaModelArchivo.removeAllElements();
+				listaModelClase.removeAllElements();
+				listaModelMetodo.removeAllElements();
+				textAreaCodigo.setText("");
+				
 				if(archivo != null) {
-					listaModelArchivo.removeAllElements();
 					for (String str : archivo) {
 						listaModelArchivo.addElement(str);
 					}
@@ -318,59 +410,6 @@ public class Principal extends JFrame {
 			}
 		});
 		menuAnalisis.add(opcionElegir);
-		
-		DefaultListModel<String> listaModelClase = new DefaultListModel<String>();
-		listClase.setModel(listaModelClase);
-		
-		listArchivo.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				String dirArchivo = textFieldDirectorioSeleccionado.getText() + "\\" + listArchivo.getSelectedValue();
-				ht = new HerramientaTesting(dirArchivo);
-				ht.obtenerClasesArchivo();
-				ArrayList<String> clasesArchivo = ht.getClasesArchivo();
-				listaModelClase.removeAllElements();
-				for(String str : clasesArchivo) {
-					listaModelClase.addElement(str);
-				}
-			}
-		});
-		
-		DefaultListModel<String> listaModelMetodo = new DefaultListModel<String>();
-		listMetodo.setModel(listaModelMetodo);
-		
-		listClase.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				ht.setClassName(listClase.getSelectedValue());
-				ht.obtenerMetodosClase();
-				ArrayList<String> metodosClase = ht.getMetodosClase();
-				listaModelMetodo.removeAllElements();
-				for(String str : metodosClase) {
-					listaModelMetodo.addElement(str);
-				}
-			}
-		});
-		
-		listMetodo.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				textAreaCodigo.replaceRange("", 0, textAreaCodigo.getText().length());
-				ht.setMethod(listMetodo.getSelectedValue());
-				ht.resolver();
-				ArrayList<String> lineasMetodoProcesado = ht.getLineasMetodoProcesado();
-				for(String str : lineasMetodoProcesado) {
-					textAreaCodigo.append(str + "\n");
-				}
-				
-				labelCantLineasCodigo.setText(String.valueOf(ht.getCantidadLineas()));
-				labelCantComentadas.setText(String.valueOf(ht.getCantidadComentarios()));
-				labelPorcentajeComentadas.setText(String.valueOf(ht.getPorcentajeComentarios()));
-				labelCantComplejidadCiclomatica.setText(String.valueOf(ht.getComplejidadCiclomatica()));
-				labelCantHalsteadLongitud.setText(String.valueOf(ht.getLongitudHalstead()));
-				labelCantHalsteadVolumen.setText(String.valueOf(ht.getVolumenHalstead()));
-			}
-		});
 		
 		JMenuItem opcionSalir = new JMenuItem("Salir");
 		opcionSalir.addMouseListener(new MouseAdapter() {
@@ -381,21 +420,23 @@ public class Principal extends JFrame {
 			}
 		});
 		menuAnalisis.add(opcionSalir);
+	
 	}
 	
 	private String obtenerDirectorio() {
 		String directorioObtenido;
-		JFileChooser chooser = new JFileChooser();
-	    chooser.setCurrentDirectory(new java.io.File("."));
-	    chooser.setDialogTitle("Seleccione el directorio");
-	    chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-	    chooser.setAcceptAllFileFilterUsed(false);
+		JFileChooser fileChooser = new JFileChooser();
+	    fileChooser.setCurrentDirectory(new java.io.File("."));
+	    fileChooser.setDialogTitle("Seleccione el directorio");
+	    fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+	    
+	    fileChooser.setAcceptAllFileFilterUsed(false);
 
-	    if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-	    	directorioObtenido = chooser.getSelectedFile().toString();
+	    if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+	    	directorioObtenido = fileChooser.getSelectedFile().getAbsolutePath().toString();
 	    	return directorioObtenido;
 	    } else {
-	    	return null;
+	    	return "";
 	    }
 	}
 }

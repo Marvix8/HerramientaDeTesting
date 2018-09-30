@@ -1,10 +1,8 @@
 package edu.unlam.herramienta_testing;
 
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -40,7 +38,6 @@ public class HerramientaTesting {
 	private int fanIn;
 	
 	private static final String []KEYWORDS = {"if", "while", "case", "for", "switch", "do", "continue", "break", "&&","||", "?", ":", "catch", "finally", "throw", "throws"};
-	private static final String TIPO_ARCHIVO = ".java";
 	private static final String CLASE_REGEX = "(?:\\S*)\\s*(?:class) (\\w*)\\s*\\S*";
 
 	private static final String METODO_REGEX = "\\s([a-z][A-Za-z0-9]*)\\s*\\(([A-Z][A-Za-z0-9\\<\\>]*\\s+[a-z][A-Za-z0-9]*,?)*\\)";
@@ -81,23 +78,6 @@ public class HerramientaTesting {
 				e.printStackTrace();
 			}
 		}
-		
-	}
-	
-	// Retorna todos los archivos de extensión .java del directorio seleccionado.
-	public void obtenerArchivosCarpeta(String path) {	
-		FilenameFilter filtro = new FilenameFilter() {
-	    @Override
-	    public boolean accept(File file, String name) {
-		    if (name.endsWith(TIPO_ARCHIVO)) {
-		        return true;
-		    } else {
-		        return false;
-		    }
-	    }};
-		
-		File directorio = new File(path);
-		archivosDirectorio = directorio.list(filtro);
 	}
 	
 	// Método que obtiene todas las clases de un archivo
@@ -133,6 +113,8 @@ public class HerramientaTesting {
 		this.cantidadLineas = 0;
 		this.longitudHalstead = 0;
 		this.volumenHalstead = "0,00";
+		this.fanIn = 0;
+		this.fanOut = 0;
 		
 		while(!fileContent.get(numeroLinea).contains(className)) {
 			numeroLinea++;
@@ -152,6 +134,8 @@ public class HerramientaTesting {
 		DecimalFormat df = new DecimalFormat("0.00");
 		this.volumenHalstead = df.format(halstead.getVolumenHalstead());
 		this.longitudHalstead = halstead.getLongitudHalstead();
+		
+		calcularFanInFanOut();
 		
 	}
 	
@@ -214,13 +198,11 @@ public class HerramientaTesting {
 		this.method = method;
 	}
 	
-	public void mostrarFanInFanOut() {
+	public void calcularFanInFanOut() {
 		calcularFanIn();
 		calcularFanOut();
-		System.out.println(this.fanIn);
-		System.out.println(this.fanOut);
-	
 	}
+	
 	private void calcularPorcentajeComentarios() {
 		DecimalFormat df = new DecimalFormat("0.00");
 		this.porcentajeComentarios = df.format(Double.valueOf(100 * this.cantidadComentarios) / Double.valueOf(this.cantidadLineas));
@@ -304,9 +286,15 @@ public class HerramientaTesting {
 
 	public String getVolumenHalstead() {
 		return volumenHalstead;
+	}
+
+	public int getFanOut() {
+		return fanOut;
+	}
+
+	public int getFanIn() {
+		return fanIn;
 	}	
-	
-	
 	
 }
 
