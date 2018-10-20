@@ -328,6 +328,9 @@ public class Principal extends JFrame {
 		DefaultListModel<String> listaModelClase = new DefaultListModel<String>();
 		listClase.setModel(listaModelClase);
 		
+		DefaultListModel<String> listaModelMetodo = new DefaultListModel<String>();
+		listMetodo.setModel(listaModelMetodo);
+		
 		listArchivo.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent lse) {
@@ -336,7 +339,11 @@ public class Principal extends JFrame {
 					ht = new HerramientaTesting(dirArchivo);
 					ht.obtenerClasesArchivo();
 					ArrayList<String> clasesArchivo = ht.getClasesArchivo();
+					
+					textAreaCodigo.setText("");
 					listaModelClase.removeAllElements();
+					listaModelMetodo.removeAllElements();
+					
 					for(String str : clasesArchivo) {
 						listaModelClase.addElement(str);
 					}					
@@ -344,15 +351,13 @@ public class Principal extends JFrame {
 			}
 		});
 		
-		DefaultListModel<String> listaModelMetodo = new DefaultListModel<String>();
-		listMetodo.setModel(listaModelMetodo);
-		
 		listClase.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent lse) {
 				if(listClase.getSelectedValue() != null) {
 					ht.setClassName(listClase.getSelectedValue());
 					ht.obtenerMetodosClase();
+					textAreaCodigo.setText("");
 					ArrayList<String> metodosClase = ht.getMetodosClase();
 					listaModelMetodo.removeAllElements();
 					textAreaCodigo.setText("");

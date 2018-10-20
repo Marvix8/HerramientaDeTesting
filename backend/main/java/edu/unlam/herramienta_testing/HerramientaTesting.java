@@ -18,7 +18,7 @@ public class HerramientaTesting {
 	ArrayList <String> lineasMetodoProcesado;
 	ArrayList <String> fileContent;
 	
-	String method;
+	static String method;
 	String className;
 	
 	String[] archivosDirectorio;
@@ -40,8 +40,8 @@ public class HerramientaTesting {
 	private static final String []KEYWORDS = {"if", "while", "case", "for", "switch", "do", "continue", "break", "&&","||", "?", ":", "catch", "finally", "throw", "throws"};
 	private static final String CLASE_REGEX = "(?:\\S*)\\s*(?:class) (\\w*)\\s*\\S*";
 
-	private static final String METODO_REGEX = "\\s([a-z][A-Za-z0-9]*)\\s*\\(([A-Z][A-Za-z0-9\\<\\>]*\\s+[a-z][A-Za-z0-9]*,?)*\\)";
-
+	//private static final String METODO_REGEX = "\\s([a-z][A-Za-z0-9]*)\\s*\\(([A-Z][A-Za-z0-9\\<\\>]*\\s+[a-z][A-Za-z0-9]*,?)*\\)";
+	private static final String METODO_REGEX = "(?:public|protected|private)(?:\\s*)?(?:\\w*)(?:\\s)(\\w*)(?:\\s*)\\((?:.*)?\\)\\s*\\{";
 	private static final String FANIN_REGEX =  "*(?=\\(.*\\)\\s*[^ {])";
 	private static final String FANOUT_REGEX = "(?!\\bif\\b|\\bfor\\b|\\bwhile\\b|\\bswitch\\b|\\btry\\b|\\bcatch\\b)(\\b[\\w]+\\b)[\\s\\n\\r]*(?=\\(.*\\))";
 	//private static final String FANIN_REGEX = "(\\.[\\s\\n\\r]*[\\w]+)[\\s\\n\\r]*(?=\\(.*\\))";
@@ -121,7 +121,12 @@ public class HerramientaTesting {
 		}
 		numeroLinea++;
 
-		while(!fileContent.get(numeroLinea).contains(method)) {
+		Pattern patronMetodoAnalizado =  Pattern.compile("(?:public|protected|private)(?:\\s*)?(?:\\w*)(?:\\s)(" + method + ")(?:\\s*)\\((?:.*)?\\)\\s*\\{");
+		Matcher matcherMetodoAnalizado = null; 
+		
+		while(numeroLinea < fileContent.size() - 1) {
+			matcherMetodoAnalizado = patronMetodoAnalizado.matcher(fileContent.get(numeroLinea));
+			if(matcherMetodoAnalizado.find()) break;
 			numeroLinea++;
 		}
 
@@ -179,7 +184,8 @@ public class HerramientaTesting {
 				}
 				if("{".contains(pal)) {
 					contadorLlaves ++;
-				} if("}".contains(pal)) {
+				} 
+				if("}".contains(pal)) {
 					contadorLlaves --;
 				}
 			}

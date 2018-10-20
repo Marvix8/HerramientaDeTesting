@@ -94,7 +94,13 @@ public class Halstead {
     
     public void procesar(ArrayList<String> lineasArchivo, int inicio, int fin) {
     	this.longitudHalstead = 0; 
-        this.volumenHalstead = 0.0; 
+        this.volumenHalstead = 0.0;
+        this.cantidadOperadores = 0;
+        this.cantidadOperandos = 0;
+        this.cantidadOperadoresUnicos = 0;
+        this.cantidadOperandosUnicos = 0;
+        setOperadores.clear();
+        setOperandos.clear();
               
            for (int i = inicio; i < fin; i++) { 
                
@@ -103,8 +109,8 @@ public class Halstead {
            } 
             
            this.cantidadOperadoresUnicos = this.setOperadores.size(); 
-           this.cantidadOperandosUnicos = this.setOperandos.size(); 
-            
+           this.cantidadOperandosUnicos = this.setOperandos.size();
+           
            this.longitudHalstead = this.cantidadOperadores + this.cantidadOperandos; 
            this.volumenHalstead = (this.longitudHalstead * (Math.log(this.cantidadOperadoresUnicos.doubleValue() +  
                     Math.log(this.cantidadOperandosUnicos.doubleValue())) / Math.log(2))); 
