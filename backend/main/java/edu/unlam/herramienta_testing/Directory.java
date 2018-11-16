@@ -1,7 +1,6 @@
 package edu.unlam.herramienta_testing;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.util.ArrayList;
 
 public class Directory {
@@ -9,7 +8,6 @@ public class Directory {
 	private ArrayList<String> filesList;
 	
 	public Directory(String path) {
-		
 		this.filesList = new ArrayList<String>();
 		
 		searchFilesIntoPath(path);
@@ -21,8 +19,7 @@ public class Directory {
 		
 		for (String fileOrDirectoryName: dir.list()) {
 			
-			String subPath = path + "/" + fileOrDirectoryName;
-			
+			String subPath = path + "\\" + fileOrDirectoryName;
 			File subDir = new File(subPath);
 			
 			if(subDir.isDirectory()) {
