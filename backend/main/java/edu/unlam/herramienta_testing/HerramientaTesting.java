@@ -5,7 +5,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -47,7 +46,7 @@ public class HerramientaTesting {
 
 	// private static final String METODO_REGEX =
 	// "\\s([a-z][A-Za-z0-9]*)\\s*\\(([A-Z][A-Za-z0-9\\<\\>]*\\s+[a-z][A-Za-z0-9]*,?)*\\)";
-	private static final String METODO_REGEX = "(?:public|protected|private)(?:\\s*)?(?:\\w*)(?:\\s)(\\w*)(?:\\s*)\\((?:.*)?\\)\\s*\\{";
+	private static final String METODO_REGEX = "(?:public|protected|private)(?:\\s*)?(?:\\w*)(?:\\s)(\\w*)(?:\\s*)\\((?:.*)?\\)\\s*(?:\\s*throws\\s+\\w*\\s*)?\\{";
 	private static final String FANIN_REGEX = "*(?=\\(.*\\)\\s*[^ {])";
 	private static final String FANOUT_REGEX = "(?!\\bif\\b|\\bfor\\b|\\bwhile\\b|\\bswitch\\b|\\btry\\b|\\bcatch\\b)(\\b[\\w]+\\b)[\\s\\n\\r]*(?=\\(.*\\))";
 	// private static final String FANIN_REGEX =
@@ -134,7 +133,7 @@ public class HerramientaTesting {
 		numeroLinea++;
 
 		Pattern patronMetodoAnalizado = Pattern.compile(
-				"(?:public|protected|private)(?:\\s*)?(?:\\w*)(?:\\s)(" + method + ")(?:\\s*)\\((?:.*)?\\)\\s*\\{");
+					"(?:public|protected|private)(?:\\s*)?(?:\\w*)(?:\\s)(" + method + ")(?:\\s*)\\((?:.*)?\\)\\s*(?:\\s*throws\\s+\\w*\\s*)?\\{");		
 		Matcher matcherMetodoAnalizado = null;
 
 		while (numeroLinea < fileContent.size() - 1) {
