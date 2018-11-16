@@ -170,6 +170,7 @@ public class Principal extends JFrame {
 		});
 
 		JButton btnOperandos = new JButton(OPERANDOS);
+		btnOperandos.setVisible(false);
 		btnOperandos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				cargarOperands(OPERANDOS, ht.getListaOperandos());
