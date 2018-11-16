@@ -189,7 +189,7 @@ public class HerramientaTesting {
 
 			for (String pal : palabras) {
 				for (int j = 0; j < KEYWORDS.length; j++) {
-					if (pal.equals("//")) {
+					if (pal.equals("//") || pal.equals("/*")) {
 						this.cantidadComentarios++;
 						break;
 					} else if (KEYWORDS[j].equals(pal)) {
