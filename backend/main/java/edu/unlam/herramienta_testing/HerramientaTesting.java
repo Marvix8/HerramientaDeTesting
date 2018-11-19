@@ -190,6 +190,7 @@ public class HerramientaTesting {
 				for (int j = 0; j < KEYWORDS.length; j++) {
 					if (pal.equals("//") || pal.equals("/*")) {
 						this.cantidadComentarios++;
+						this.cantidadLineas--;
 						break;
 					} else if (KEYWORDS[j].equals(pal)) {
 						this.complejidadCiclomatica++;
@@ -224,8 +225,9 @@ public class HerramientaTesting {
 
 	private void calcularPorcentajeComentarios() {
 		DecimalFormat df = new DecimalFormat("0.00");
+		double porcentaje = 100 * this.cantidadComentarios / Double.valueOf(this.cantidadLineas);
 		this.porcentajeComentarios = df
-				.format(Double.valueOf(100 * this.cantidadComentarios) / Double.valueOf(this.cantidadLineas));
+				.format(Double.valueOf(porcentaje > 100 ? 100 : porcentaje));
 	}
 
 	public int getComplejidadCiclomatica() {
