@@ -382,7 +382,7 @@ public class Principal extends JFrame {
 			@Override
 			public void valueChanged(ListSelectionEvent lse) {
 				if (listArchivo.getSelectedValue() != null) {
-					String dirArchivo = textFieldDirectorioSeleccionado.getText() + "\\"
+					String dirArchivo = textFieldDirectorioSeleccionado.getText().replaceAll("\\\\", "/") + "/"
 							+ listArchivo.getSelectedValue();
 					ht = new HerramientaTesting(dirArchivo);
 					ht.obtenerClasesArchivo();
@@ -486,7 +486,7 @@ public class Principal extends JFrame {
 		fileChooser.setAcceptAllFileFilterUsed(false);
 
 		if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-			directorioObtenido = fileChooser.getSelectedFile().getAbsolutePath().toString();
+			directorioObtenido = fileChooser.getSelectedFile().getAbsolutePath().toString().replaceAll("\\\\", "/");
 			return directorioObtenido;
 		} else {
 			return "";
